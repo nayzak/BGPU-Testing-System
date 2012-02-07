@@ -1,2 +1,25 @@
-readme
+Install 
+sudo apt-get install python-pip
+sudo apt-get install python-dev
+sudo pip install tornado
+sudo pip install Mako
+sudo pip install MongoKit
+sudo pip install python-dateutil
+sudo pip install pytz
+sudo pip install wtforms
+sudo pip install webhelpers
+
+
+git clone git://github.com/trendrr/whirlwind.git
+cd whirlwind
+sudo python setup.py install
+
+
+whirlwind-admin.py --create-application myapp
+whirlwind-admin.py --gcs
+
+./mongod --dbpath /home/user/Applications/mongo-database
+
+python main.py
+http://localhost:8000/
 
