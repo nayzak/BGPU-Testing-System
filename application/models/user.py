@@ -1,3 +1,4 @@
+# coding: utf-8
 from whirlwind.db.mongo import Mongo
 from mongokit import *
 import datetime

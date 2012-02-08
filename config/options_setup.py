@@ -39,3 +39,15 @@ define("redis_port", default=6379, type=int)
 define("redis_db", default=0, type=int)
 
 define("memcache_host", default=None)
+
+define("smtp_host", default='localhost')
+
+define("smtp_port", default=25, type=int)
+
+define("smtp_user", default=None)
+
+define("smtp_password", default=None)
+
+define("email_notification_address", default=None)
+
+define("email_notification_name", default=None)

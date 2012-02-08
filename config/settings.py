@@ -54,3 +54,11 @@ middleware_classes = [
     #"whirlwind.middleware.session.redis.middleware.SessionMiddleware"
     #"whirlwind.middleware.session.memcache.middleware.SessionMiddleware"
 ]
+
+
+smtp_host = "smtp.mail.ru"
+smtp_port = 25
+smtp_user = "krest_yan"
+smtp_password = "qwerty6"
+email_notification_address = "krest_yan@mail.ru"
+email_notification_name = "Testing System Admin"
