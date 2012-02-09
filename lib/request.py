@@ -30,4 +30,4 @@ class BaseRequest(request.BaseRequest):
         )
 
     def get_all_arguments(self):
-        return dict(map(lambda key: (key, unicode(self.request.arguments[key][0], 'utf-8')), self.request.arguments))
+        return dict(map(lambda key: (key, self.request.arguments[key][0]), self.request.arguments))

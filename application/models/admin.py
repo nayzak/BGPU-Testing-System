@@ -33,8 +33,8 @@ class Admin(User):
         Mongo.db.ui.users.insert(admin)
 
         mail.sendmail(
-            admin.email.encode('utf-8'),
-            ' '.join([admin.name.last, admin.name.first, admin.name.middle]).encode('utf-8'),
+            admin.email,
+            ' '.join([admin.name.last, admin.name.first, admin.name.middle]),
             'Уведомление о регистрации',
             'Вы успешно зарегистрированы как администратор системы тестирования.'
         )
