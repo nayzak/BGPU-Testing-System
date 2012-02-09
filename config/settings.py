@@ -27,7 +27,7 @@ db_host = 'localhost'
 db_port = 27017
 
 #define the database name
-db_name = 'whirlwind'
+db_name = 'testing_system'
 
 #uncomment the following if when using redis session middleware
 
@@ -55,6 +55,9 @@ middleware_classes = [
     #"whirlwind.middleware.session.memcache.middleware.SessionMiddleware"
 ]
 
+mako_extra_imports = [
+    "from application.views.helpers.forms import render_form"
+]
 
 smtp_host = "smtp.mail.ru"
 smtp_port = 25

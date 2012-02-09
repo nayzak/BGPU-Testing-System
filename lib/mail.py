@@ -23,4 +23,4 @@ def sendmail(recipient_addr, recipient_name, subject, text, html=None):
         s.sendmail(options.email_notification_address, [recipient_addr], msg.as_string())
         Log.info('Sended email to ' + recipient_addr)
     except smtplib.SMTPException as e:
-        Log.error(e.message)
+        Log.error(e)

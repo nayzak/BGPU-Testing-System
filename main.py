@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from whirlwind.core.bootstrap import Bootstrap
+# from whirlwind.core.bootstrap import Bootstrap
+from application.bootstrap import Bootstrap
 import os
 
 #main app entry point
