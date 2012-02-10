@@ -32,3 +32,15 @@ class User(Document):
     use_dot_notation = True
 
     required_fields = ['name.first', 'name.last', 'roles']
+
+    @staticmethod
+    def get_by(field, value):
+        return Mongo.db.ui.users.User.find_one({field: value})
+
+    def update_history(self):
+        self.history.last_login = datetime.datetime.utcnow()
+        self.history.num_logins += 1L
+        self.save()
+
+    def has_role(self, role):
+        return role in self.roles

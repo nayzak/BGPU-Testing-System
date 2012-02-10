@@ -13,6 +13,7 @@ class Group(Document):
         graduated - выпустилась ли группа
     '''
     structure = {
+        'organization_id': ObjectId,
         'profession': unicode,
         'created_at': datetime.datetime,
         'current_name': unicode,
@@ -20,7 +21,7 @@ class Group(Document):
         'graduated': bool
     }
 
-    required_fields = ['profession', 'created_at', 'current_course', 'current_name', 'graduated']
+    required_fields = ['organization_id', 'profession', 'created_at', 'current_course', 'current_name', 'graduated']
 
     default_values = {'graduated': False}
 

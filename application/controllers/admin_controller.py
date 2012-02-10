@@ -1,8 +1,17 @@
 # coding: utf-8
 from lib.request import BaseRequest
-from whirlwind.view.decorators import route
+from whirlwind.view.decorators import route, role_required
 from application.models.admin import Admin
+from application.models.user import User
 from application.forms.create_admin import CreateAdminForm
+
+
+@route('/admin')
+class IndexHandler(BaseRequest):
+    @role_required('admin')
+    def get(self):
+        print self.current_user
+        self.render_template('/admin/index.html', user=self.current_user)
 
 
 @route('/admin/init')
