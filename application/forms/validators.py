@@ -1,5 +1,6 @@
 from wtforms.validators import StopValidation
 from whirlwind.db.mongo import Mongo
+from pymongo.objectid import ObjectId
 import hashlib
 
 
@@ -36,7 +37,10 @@ class Authorized(object):
         self.message = message
 
     def __call__(self, form, field):
-        doc = Mongo.db.ui[self.collection].find_one({self.doc_login_field: form[self.form_login_field].data})
+        value = form[self.form_login_field].data
+        if self.doc_login_field == '_id':
+            value = ObjectId(form[self.form_login_field].data.decode('hex'))
+        doc = Mongo.db.ui[self.collection].find_one({self.doc_login_field: value})
         if doc is None:
             field.errors[:] = []
             raise StopValidation(field.gettext(u'User not found.'))

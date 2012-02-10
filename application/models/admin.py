@@ -10,7 +10,7 @@ from lib import mail
 class Admin(User):
     required_fields = ['email', 'password']
 
-    default_values = {'roles': ['admin']}
+    default_values = {'roles': ['admin', 'tutor']}
 
     @staticmethod
     def is_admin_created():
@@ -37,4 +37,15 @@ class Admin(User):
             ' '.join([admin.name.last, admin.name.first, admin.name.middle]),
             'Уведомление о регистрации',
             'Вы успешно зарегистрированы как администратор системы тестирования.'
+        )
+
+    @staticmethod
+    def edit_admin(first_name, last_name, middle_name, email):
+        Mongo.db.ui.users.update(
+            {'_type': 'Admin'},
+            {'$set': {'name.first': first_name,
+                      'name.last': last_name,
+                      'name.middle': middle_name,
+                      'email': email}
+            }
         )

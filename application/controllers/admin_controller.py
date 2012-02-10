@@ -2,15 +2,14 @@
 from lib.request import BaseRequest
 from whirlwind.view.decorators import route, role_required
 from application.models.admin import Admin
-from application.models.user import User
-from application.forms.create_admin import CreateAdminForm
+from application.forms.manage_admin import CreateAdminForm, EditAdminForm
+from tornado.web import HTTPError
 
 
 @route('/admin')
 class IndexHandler(BaseRequest):
     @role_required('admin')
     def get(self):
-        print self.current_user
         self.render_template('/admin/index.html', user=self.current_user)
 
 
@@ -40,3 +39,35 @@ class CreateAdminHandler(BaseRequest):
         )
 
         self.redirect('/admin/login')
+
+
+@route('/admin/profile/edit')
+class EditAdminHandler(BaseRequest):
+    @role_required('admin')
+    def get(self):
+        if self.current_user['_type'] != 'Admin':
+            raise HTTPError(403)
+        form = EditAdminForm(
+            userid=self.current_user._id,
+            email=self.current_user.email,
+            first_name=self.current_user.name.first,
+            last_name=self.current_user.name.last,
+            middle_name=self.current_user.name.middle,
+        )
+        self.render_template('/admin/edit_admin.html', form=form)
+
+    @role_required('admin')
+    def post(self):
+        if self.current_user['_type'] != 'Admin':
+            raise HTTPError(403)
+        form = EditAdminForm(**self.get_all_arguments())
+        if not form.validate():
+            self.render_template('/admin/edit_admin.html', form=form)
+            return
+        Admin.edit_admin(
+            form.first_name.data,
+            form.last_name.data,
+            form.middle_name.data,
+            form.email.data
+        )
+        self.redirect('/admin')

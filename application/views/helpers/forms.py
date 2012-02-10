@@ -7,7 +7,10 @@ def render_form(form):
             html += '<div class="form-actions">'
             html += unicode(field(class_='btn btn-success'))
         else:
-            html += '<div class="control-group' + (' error' if len(field.errors) else '') + '">'
+            if type(field).__name__ is 'HiddenField':
+                html += '<div style="display: none;">'
+            else:
+                html += '<div class="control-group' + (' error' if len(field.errors) else '') + '">'
             if field.flags.required:
                 field.label.text += ' *'
             html += unicode(field.label)
