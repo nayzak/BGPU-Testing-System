@@ -3,7 +3,21 @@ from tornado.options import options
 from mako.lookup import TemplateLookup
 
 
+class MultiValueDict(dict):
+    def getlist(self, key, default=None):
+        try:
+            return super(MultiValueDict, self).__getitem__(key)
+        except KeyError:
+            if default is None:
+                return []
+            return default
+
+
 class BaseRequest(request.BaseRequest):
+    def __init__(self, application, request):
+        super(BaseRequest, self).__init__(application, request)
+        self.request.arguments = MultiValueDict(request.arguments)
+
     def _get_template_lookup(self):
         from whirlwind.view.filters import Cycler
         Cycler.cycle_registry = {}
@@ -28,6 +42,3 @@ class BaseRequest(request.BaseRequest):
             imports=filter_imports,
             default_filters=options.mako_default_filters
         )
-
-    def get_all_arguments(self):
-        return dict(map(lambda key: (key, self.request.arguments[key][0]), self.request.arguments))

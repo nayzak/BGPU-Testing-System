@@ -10,7 +10,7 @@ class LoginHandler(BaseRequest):
         self.render_template('/admin/login.html', form=LoginForm())
 
     def post(self):
-        form = LoginForm(**self.get_all_arguments())
+        form = LoginForm(self.request.arguments)
         if not form.validate():
             self.render_template('/admin/login.html', form=form)
         else:

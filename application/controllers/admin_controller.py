@@ -25,7 +25,7 @@ class CreateAdminHandler(BaseRequest):
         if Admin.is_admin_created():
             self.redirect('/admin/login')
 
-        form = CreateAdminForm(**self.get_all_arguments())
+        form = CreateAdminForm(self.get_all_arguments())
 
         if not form.validate():
             self.render_template('/admin/create_admin.html', form=form)
@@ -60,7 +60,7 @@ class EditAdminHandler(BaseRequest):
     def post(self):
         if self.current_user['_type'] != 'Admin':
             raise HTTPError(403)
-        form = EditAdminForm(**self.get_all_arguments())
+        form = EditAdminForm(self.request.arguments)
         if not form.validate():
             self.render_template('/admin/edit_admin.html', form=form)
             return
