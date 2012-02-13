@@ -24,11 +24,11 @@ class Organization(Document):
     use_dot_notation = True
 
     @staticmethod
-    def create_organization(name, fullname, status, contacts):
-        org = Organization()
-        org.name = name
-        org.full_name = fullname
-        org.status = status
+    def instance(name, full_name, status, contacts):
+        org = Mongo.db.ui.organizations.Organization()
+        org.name = unicode(name)
+        org.full_name = unicode(full_name)
+        org.status = unicode(status)
         org.contacts = list()
         for cn in contacts:
             contact = {
@@ -45,7 +45,25 @@ class Organization(Document):
                     'comment': ph.get('comment', '')
                 })
             org.contacts.append(contact)
-
-        Mongo.db.ui.organizations.insert(org)
-
         return org
+
+    @staticmethod
+    def create_organization(name, full_name, status, contacts):
+        org = Organization.instance(name, full_name, status, contacts)
+        Mongo.db.ui.organizations.insert(org)
+        return org
+
+    @staticmethod
+    def update_organization(_id, name, full_name, status, contacts):
+        Mongo.db.ui.organizations.update(
+            {'_id': _id},
+            {'$set': {'name': name,
+                      'full_name': full_name,
+                      'status': status,
+                      'contacts': contacts}
+            }
+        )
+
+    @staticmethod
+    def get_by(field, value):
+        return Mongo.db.ui.organizations.Organization.find_one({field: value})

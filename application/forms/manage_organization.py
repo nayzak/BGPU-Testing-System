@@ -25,7 +25,13 @@ class CreateOrganizationForm(Form):
     title = 'Добавление учебного заведения'
 
     name = TextField('Название', [validators.required()], description='Аббревиатура')
-    fullname = TextField('Полное название', [validators.required()])
-    status = AutocompleteField('Статус', [validators.required()], collection='organizations', db_field='status', description='Например, вуз, суз')
+    full_name = TextField('Полное название', [validators.required()])
+    status = AutocompleteField('Статус', [validators.required()], collection='organizations', db_field='status', description='Например: вуз, суз')
     contacts = FieldList(FormField(ContactForm), label='Адрес')
     submit = SubmitField('Добавить')
+
+
+class EditOrganizationForm(CreateOrganizationForm):
+    title = 'Редактирование учебного заведения'
+
+    submit = SubmitField('Сохранить')
