@@ -1,5 +1,6 @@
+#coding: utf-8
 from whirlwind.db.mongo import Mongo
-from pymongo import *
+from mongokit import *
 
 
 @Mongo.db.connection.register
@@ -21,3 +22,30 @@ class Organization(Document):
     required_fields = ['name', 'full_name', 'status']
 
     use_dot_notation = True
+
+    @staticmethod
+    def create_organization(name, fullname, status, contacts):
+        org = Organization()
+        org.name = name
+        org.full_name = fullname
+        org.status = status
+        org.contacts = list()
+        for cn in contacts:
+            contact = {
+                'country': cn.get('country', ''),
+                'region': cn.get('region', ''),
+                'city': cn.get('city', ''),
+                'address': cn.get('address', ''),
+                'comment': cn.get('comment', ''),
+                'phones': list()
+            }
+            for ph in cn.get('phones', list()):
+                contact['phones'].append({
+                    'number': ph.get('number', ''),
+                    'comment': ph.get('comment', '')
+                })
+            org.contacts.append(contact)
+
+        Mongo.db.ui.organizations.insert(org)
+
+        return org

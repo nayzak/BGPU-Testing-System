@@ -5,7 +5,7 @@ from wtforms import TextField, FieldList, Form, FormField, SubmitField, validato
 class PhoneForm(Form):
     class_ = 'form-inline'
 
-    phone = TextField('Номер', [validators.required()])
+    number = TextField('Номер', [validators.required()])
     comment = TextField('Комментарий')
 
 
@@ -17,7 +17,7 @@ class ContactForm(Form):
     city = TextField('Город', [validators.required()])
     address = TextField('Адрес')
     comment = TextField('Комментарий')
-    phones = FieldList(FormField(PhoneForm), label='Телефон', min_entries=1)
+    phones = FieldList(FormField(PhoneForm), label='Телефон')
 
 
 class CreateOrganizationForm(Form):
@@ -26,5 +26,5 @@ class CreateOrganizationForm(Form):
     name = TextField('Название', [validators.required()])
     fullname = TextField('Полное название', [validators.required()])
     status = TextField('Статус', [validators.required()])
-    contacts = FieldList(FormField(ContactForm), label='Адрес', min_entries=1)
+    contacts = FieldList(FormField(ContactForm), label='Адрес')
     submit = SubmitField('Добавить')
