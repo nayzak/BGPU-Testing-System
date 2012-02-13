@@ -1,0 +1,41 @@
+.form-vertical .control-group {
+  margin-bottom: 10px;
+  *zoom: 1;
+}
+.form-vertical  .control-group:before, .form-vertical  .control-group:after {
+  display: block;
+  content: "";
+}
+.form-vertical .control-group:after {
+  clear: both;
+}
+.form-vertical  .control-group  label {
+  float: none;
+  width: auto;
+  padding-top: 5px;
+  text-align: left;
+}
+.form-vertical  .controls,
+.form-inline .controls {
+  margin-left: 0;
+}
+.form-vertical .form-actions {
+  padding: none;
+}
+.form-inline .control-group {
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 0;
+}
+.form-inline  .control-group  label {
+  float: none;
+  width: auto;
+  text-align: left;
+}
+
+.control-group .add-button,
+.control-group .remove-button {
+  position: relative;
+  top: 2px;
+  left: 5px;
+}
