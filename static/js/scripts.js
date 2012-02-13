@@ -20,11 +20,16 @@
       _ref = clone.find('[id^=' + t_id + ']');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         el = _ref[_i];
-        $(el).attr('id', $(el).attr('id').replace(t_id, id));
+        if ($(el).attr('id')) {
+          $(el).attr('id', $(el).attr('id').replace(t_id, id));
+        }
+        if ($(el).attr('name')) {
+          $(el).attr('name', $(el).attr('name').replace(t_id, id));
+        }
       }
       template.after(clone);
-      template.find('> .add-button').fadeOut();
-      template.find('> .remove-button').fadeOut();
+      template.find('> .add-button').hide();
+      template.find('> .remove-button').hide();
       return false;
     });
   });

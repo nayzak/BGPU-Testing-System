@@ -17,8 +17,9 @@ $ ->
         id = id.join('-')
         clone.attr('id', id)
         for el in clone.find('[id^=' + t_id + ']')
-            $(el).attr('id', $(el).attr('id').replace(t_id, id))
+            $(el).attr('id', $(el).attr('id').replace(t_id, id)) if $(el).attr('id')
+            $(el).attr('name', $(el).attr('name').replace(t_id, id)) if $(el).attr('name')
         template.after(clone)
-        template.find('> .add-button').fadeOut()
-        template.find('> .remove-button').fadeOut()
+        template.find('> .add-button').hide()
+        template.find('> .remove-button').hide()
         return false

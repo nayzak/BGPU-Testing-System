@@ -12,5 +12,6 @@ class CreateOrganizationHandler(BaseRequest):
     @role_required('admin')
     def post(self):
         form = CreateOrganizationForm(self.request.arguments)
-        form.validate()
-        self.render_template('/admin/create_organization.html', form=form)
+        if not form.validate():
+            self.render_template('/admin/create_organization.html', form=form)
+            return
