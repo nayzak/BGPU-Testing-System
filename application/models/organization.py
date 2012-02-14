@@ -72,3 +72,7 @@ class Organization(Document):
     @staticmethod
     def get_all(sorter='_id', direction=1):
         return Mongo.db.ui.organizations.find().sort(sorter, ASCENDING if int(direction) == 1 else DESCENDING)
+
+    @staticmethod
+    def remove(_id):
+        Mongo.db.ui.organizations.remove({'_id': _id})

@@ -83,13 +83,14 @@ class ListOrganizationHandler(BaseRequest):
                        ('status', 'Статус'),
                        ('contacts.city', 'Город')],
             'actions': {'remove': ('/admin/organization/remove/{}', '_id'),
-                        'edit': ('/admin/organization/edit/{}', '_id')},
+                        'edit': ('/admin/organization/edit/{}', '_id'),
+                        'view': ('/admin/organization/{}', '_id')},
             'url': self.request.full_url()
         }
         page = self.get_argument('page', 0)
         sort = self.get_argument('sort', '_id')
         dest = self.get_argument('dest', 1)
-        paginator = Paginator(Organization.get_all(sort, dest), self.request.full_url(), page, 20)
+        paginator = Paginator(Organization.get_all(sort, dest), self.request.full_url(), page, 10)
         self.render_template(
             self.template,
             title=self.title,
@@ -97,3 +98,16 @@ class ListOrganizationHandler(BaseRequest):
             list_args=list_args,
             paginator=paginator
         )
+
+
+@route(r'/admin/organization/remove/([0-9a-z]+)')
+class RemoveOrganizationHandler(BaseRequest):
+    @role_required('admin')
+    def get(self, _id):
+        try:
+            _id = ObjectId(_id.decode('hex'))
+        except:
+            raise HTTPError(404)
+        Organization.remove(_id)
+        self.flash.success = 'Учебное заведение успешно удалено'
+        self.redirect(self.request.headers.get('Referer', '/admin/organization/list'))
