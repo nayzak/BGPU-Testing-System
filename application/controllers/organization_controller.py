@@ -9,18 +9,19 @@ from tornado.web import HTTPError
 
 @route('/admin/organization/create')
 class CreateOrganizationHandler(BaseRequest):
+    title = 'Новое учебное заведение'
+    template = '/admin/create_organization.html'
+
     @role_required('admin')
     def get(self):
         form = CreateOrganizationForm()
-        form.contacts.append_entry()
-        form.contacts.entries[0].phones.append_entry()
-        self.render_template('/admin/create_organization.html', form=form)
+        self.render_template(self.template, form=form, title=self.title)
 
     @role_required('admin')
     def post(self):
         form = CreateOrganizationForm(self.request.arguments)
         if not form.validate():
-            self.render_template('/admin/create_organization.html', form=form)
+            self.render_template(self.template, form=form, title=self.title)
             return
         Organization.create_organization(
             name=form.data.get('name', ''),
@@ -28,11 +29,15 @@ class CreateOrganizationHandler(BaseRequest):
             status=form.data.get('status', ''),
             contacts=form.data.get('contacts', list())
         )
+        self.flash.success = 'Учебное заведение успешно добавлено.'
         self.redirect('/admin')
 
 
 @route(r'/admin/organization/edit/([0-9a-z]+)')
 class EditOrganizationHandler(BaseRequest):
+    title = 'Редактирование учебного заведения'
+    template = '/admin/create_organization.html'
+
     @role_required('admin')
     def get(self, _id):
         try:
@@ -41,11 +46,7 @@ class EditOrganizationHandler(BaseRequest):
             raise HTTPError(404)
         org = Organization.get_by('_id', _id)
         form = EditOrganizationForm(obj=org)
-        if not len(form.contacts):
-            form.contacts.append_entry()
-        if not len(form.contacts.entries[0].phones):
-            form.contacts.entries[0].phones.append_entry()
-        self.render_template('/admin/edit_organization.html', form=form)
+        self.render_template(self.template, form=form, title=self.title)
 
     @role_required('admin')
     def post(self, _id):
@@ -55,7 +56,7 @@ class EditOrganizationHandler(BaseRequest):
             raise HTTPError(404)
         form = CreateOrganizationForm(self.request.arguments)
         if not form.validate():
-            self.render_template('/admin/edit_organization.html', form=form)
+            self.render_template(self.template, form=form, title=self.title)
             return
         Organization.update_organization(
             _id=_id,
@@ -64,4 +65,5 @@ class EditOrganizationHandler(BaseRequest):
             status=form.data.get('status', ''),
             contacts=form.data.get('contacts', list())
         )
+        self.flash.success = 'Информация по учебному заведению успешно сохранена.'
         self.redirect('/admin')

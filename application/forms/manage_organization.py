@@ -30,6 +30,16 @@ class CreateOrganizationForm(Form):
     contacts = FieldList(FormField(ContactForm), label='Адрес')
     submit = SubmitField('Добавить')
 
+    def __init__(self, formdata=None, obj=None, prefix='', **kwargs):
+        super(CreateOrganizationForm, self).__init__(formdata, obj, prefix, **kwargs)
+        #Если форма создавалась в методе get, то добавляем поле адреса и телефона
+        import traceback
+        if traceback.extract_stack()[-3][2] == 'get':
+            if not len(self.contacts):
+                self.contacts.append_entry()
+            if not len(self.contacts.entries[0].phones):
+                self.contacts.entries[0].phones.append_entry()
+
 
 class EditOrganizationForm(CreateOrganizationForm):
     title = 'Редактирование учебного заведения'

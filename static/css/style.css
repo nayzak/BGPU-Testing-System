@@ -40,6 +40,10 @@
   left: 5px;
 }
 
-#fullname {
+#full_name {
   width: 500px !important;
+}
+
+.alert {
+  text-align: center !important;
 }

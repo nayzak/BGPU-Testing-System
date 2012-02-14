@@ -10,25 +10,28 @@ from tornado.web import HTTPError
 class IndexHandler(BaseRequest):
     @role_required('admin')
     def get(self):
-        self.render_template('/admin/index.html', user=self.current_user)
+        self.render_template('/admin/index.html', user=self.current_user, title='Панель управления')
 
 
 @route('/admin/init')
 class CreateAdminHandler(BaseRequest):
+    title = 'Регистрация администратора'
+    template = '/admin/create_admin.html'
+
     def get(self):
         if Admin.is_admin_created():
-            self.redirect('/admin/login')
-
-        self.render_template('/admin/create_admin.html', form=CreateAdminForm())
+            self.flash.notice = 'Администратор уже зарегистрирован.'
+            self.redirect('/admin')
+            return
+        self.render_template(self.template, form=CreateAdminForm(), title=self.title)
 
     def post(self):
         if Admin.is_admin_created():
-            self.redirect('/admin/login')
+            self.redirect('/admin')
 
-        form = CreateAdminForm(self.get_all_arguments())
-
+        form = CreateAdminForm(self.request.arguments)
         if not form.validate():
-            self.render_template('/admin/create_admin.html', form=form)
+            self.render_template(self.template, form=form, title=self.title)
 
         Admin.create_admin(
             form.first_name.data,
@@ -38,11 +41,15 @@ class CreateAdminHandler(BaseRequest):
             form.password.data
         )
 
+        self.flash.success = 'Администратор успешно зарегистрирован. Войдите в систему.'
         self.redirect('/admin/login')
 
 
 @route('/admin/profile/edit')
 class EditAdminHandler(BaseRequest):
+    title = 'Редактирование администратора'
+    template = '/admin/create_admin.html'
+
     @role_required('admin')
     def get(self):
         if self.current_user['_type'] != 'Admin':
@@ -54,7 +61,7 @@ class EditAdminHandler(BaseRequest):
             last_name=self.current_user.name.last,
             middle_name=self.current_user.name.middle,
         )
-        self.render_template('/admin/edit_admin.html', form=form)
+        self.render_template(self.template, form=form, title=self.title)
 
     @role_required('admin')
     def post(self):
@@ -62,7 +69,7 @@ class EditAdminHandler(BaseRequest):
             raise HTTPError(403)
         form = EditAdminForm(self.request.arguments)
         if not form.validate():
-            self.render_template('/admin/edit_admin.html', form=form)
+            self.render_template(self.template, form=form, title=self.title)
             return
         Admin.edit_admin(
             form.first_name.data,
@@ -70,4 +77,5 @@ class EditAdminHandler(BaseRequest):
             form.middle_name.data,
             form.email.data
         )
+        self.flash.success = 'Профиль администратора успешно сохранен.'
         self.redirect('/admin')
