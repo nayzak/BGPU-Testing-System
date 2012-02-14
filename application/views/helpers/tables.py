@@ -16,39 +16,52 @@ LINKS = {
 }
 
 
-def render_data_list(data, fields):
+def render_data_list(data, fields, actions, url):
     table = '<table class="table table-striped table-bordered">'
     table += '<thead><tr>'
-    for field in [v for k, v in fields.items() if k != 'links']:
-        table += '<th>{}</th>'.format(field)
-    if 'links' in fields:
-        table += '<th>{}</th>'.format('Действия')
+    for db_field, field in fields:
+            table += '<th><a href="{}" title="Сортировать">{}</a></th>'.format(_generate_sorter_link(url, db_field), field)
+    table += '<th>Действия</th>'
     table += '</tr></thead><tbody>'
     for doc in data:
         table += '<tr>'
-        for field in fields:
-            if field != 'links':
-                field = field.split('.')
-                val = doc
-                for f in field:
-                    if type(val).__name__ == 'dict':
-                        val = val[f]
-                    elif type(val).__name__ == 'list' and len(val):
-                        val = val[0][f]
-                    else:
-                        val = 'n/a'
-                table += '<td>{}</td>'.format(val)
-        if 'links' in fields:
-            table += '<td>'
-            for type_, link in fields['links'].items():
-                link = link[0].format(*[doc[key] for key in link[1:]])
-                table += '<a href="{}" title="{}" class="action"><i class="{}"></i></a>'.format(link, LINKS[type_]['title'], LINKS[type_]['icon'])
-            table += '</td>'
+        for db_field, field in fields:
+            field = db_field.split('.')
+            val = doc
+            for f in field:
+                if type(val).__name__ == 'dict':
+                    val = val[f]
+                elif type(val).__name__ == 'list' and len(val):
+                    val = val[0][f]
+                else:
+                    val = 'n/a'
+            table += '<td>{}</td>'.format(val)
+        table += '<td>'
+        for type_, link in actions.items():
+            link = link[0].format(*[doc[key] for key in link[1:]])
+            table += '<a href="{}" title="{}" class="action"><i class="{}"></i></a>'.format(link, LINKS[type_]['title'], LINKS[type_]['icon'])
+        table += '</td>'
 
         table += '</tr>'
     table += '</tbody></table>'
 
     return table
+
+
+def _generate_sorter_link(url, db_field):
+    import re
+    if url.find('?') == -1:
+        return '{}?sort={}&dest={}'.format(url, db_field, 1)
+    r = re.search(r'sort=([A-Za-z0-9._-]+)', url)
+    if r and db_field == r.groups()[0]:
+        r = re.search(r'dest=([-1]+)', url)
+        if r:
+            return url.replace(r.group(), 'dest=' + str(-1 * int(r.groups()[0])))
+        return url
+    elif r:
+        return url.replace(r.group(), 'sort=' + db_field)
+    else:
+        return '{}&sort={}&dest={}'.format(url, db_field, 1)
 
 
 class Paginator(Paginator):
@@ -59,7 +72,7 @@ class Paginator(Paginator):
 
     @property
     def has_next(self):
-        return self.current_page != self.page_count - 1
+        return self.current_page != self.page_count
 
     def build_url(self, page_num):
         import re
@@ -71,21 +84,23 @@ class Paginator(Paginator):
                 return re.sub(r'page=\d+', page_str, self.url)
             else:
                 return "%s&page=%d" % (self.url, page_num)
-
         else:
             return "%s?page=%d" % (self.url, page_num)
 
     def __unicode__(self):
+        if self.page_count == 1:
+            return ''
+
         paginator = '<div class="pagination"><ul>'
 
         class_ = '' if self.has_previous else 'disabled'
         link = self.build_url(self.previous_page) if self.has_previous else '#'
         paginator += '<li class="{}"><a href="{}">«</a></li>'.format(class_, link)
 
-        for i in range(1, self.page_count):
-            class_ = 'active' if i == self.current_page else ''
-            link = self.build_url(i - 1)
-            paginator += '<li class="{}"><a href="{}">{}</a></li>'.format(class_, link, i)
+        for i in range(0, self.page_count):
+            class_ = 'active' if i == self.current_page - 1 else ''
+            link = self.build_url(i)
+            paginator += '<li class="{}"><a href="{}">{}</a></li>'.format(class_, link, i + 1)
 
         class_ = '' if self.has_next else 'disabled'
         link = self.build_url(self.next_page) if self.has_next else '#'

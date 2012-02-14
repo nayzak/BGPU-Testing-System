@@ -71,4 +71,4 @@ class Organization(Document):
 
     @staticmethod
     def get_all(sorter='_id', direction=1):
-        return Mongo.db.ui.organizations.find().sort(sorter, ASCENDING if direction is 1 else DESCENDING)
+        return Mongo.db.ui.organizations.find().sort(sorter, ASCENDING if int(direction) == 1 else DESCENDING)

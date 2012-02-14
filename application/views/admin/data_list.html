@@ -4,7 +4,7 @@
 ### Template for content pages
 <%def name="body()">
 <div class="container">
-        ${data, fields | render_data_list}
+        ${render_data_list(data, **list_args)}
         ${unicode(paginator)}
 </div>
 </%def>

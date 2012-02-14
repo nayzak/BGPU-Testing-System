@@ -77,16 +77,23 @@ class ListOrganizationHandler(BaseRequest):
 
     @role_required('tutor')
     def get(self):
-        renderer_args = {
-            'name': 'Название',
-            'full_name': 'Полное название',
-            'status': 'Статус',
-            'contacts.city': 'Город',
-            'links': {
-                'remove': ('/admin/organization/remove/{}', '_id'),
-                'edit': ('/admin/organization/edit/{}', '_id')
-            }
+        list_args = {
+            'fields': [('name', 'Название'),
+                       ('full_name', 'Полное название'),
+                       ('status', 'Статус'),
+                       ('contacts.city', 'Город')],
+            'actions': {'remove': ('/admin/organization/remove/{}', '_id'),
+                        'edit': ('/admin/organization/edit/{}', '_id')},
+            'url': self.request.full_url()
         }
         page = self.get_argument('page', 0)
-        paginator = Paginator(Organization.get_all(), self.request.full_url(), page, 5)
-        self.render_template(self.template, title=self.title, data=paginator.page, fields=renderer_args, paginator=paginator)
+        sort = self.get_argument('sort', '_id')
+        dest = self.get_argument('dest', 1)
+        paginator = Paginator(Organization.get_all(sort, dest), self.request.full_url(), page, 20)
+        self.render_template(
+            self.template,
+            title=self.title,
+            data=paginator.page,
+            list_args=list_args,
+            paginator=paginator
+        )
