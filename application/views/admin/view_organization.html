@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+<%inherit file="/layouts/htmlPage.html" />
+
+### Template for content pages
+<%def name="body()">
+<div class="container">
+    <h1>${org.name}</h1>
+    <strong>${org.full_name}</strong> <em>${org.status}</em>
+    <p>
+        <a href="/admin/organization/edit/${unicode(org._id)}">редактировать</a>
+        <a href="/admin/organization/remove/${unicode(org._id)}">удалить</a>
+        <a href="/admin/organization/list">к списку</a>
+    </p>
+    <p>
+    % for contact in org.contacts:
+        <address>
+            <strong>${contact['comment']}</strong>
+            <br>
+            ${contact['country']}, ${contact['region']}, ${contact['city']}
+            <br>
+            ${contact['address']}
+            <br>
+            % for phone in contact['phones']:
+                <abbr title="${phone['comment']}">Т:</abbr>&nbsp;&nbsp;&nbsp;
+                ${phone['number']}
+                <br>
+            % endfor
+        </address>
+    % endfor
+    </p>
+</div>
+</%def>

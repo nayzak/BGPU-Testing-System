@@ -111,3 +111,20 @@ class RemoveOrganizationHandler(BaseRequest):
         Organization.remove(_id)
         self.flash.success = 'Учебное заведение успешно удалено'
         self.redirect(self.request.headers.get('Referer', '/admin/organization/list'))
+
+
+@route(r'/admin/organization/([0-9a-z]+)')
+class ViewOrganizationHandler(BaseRequest):
+    title = 'Просмотр учебного заведения'
+    template = '/admin/view_organization.html'
+
+    @role_required('tutor')
+    def get(self, _id):
+        try:
+            _id = ObjectId(_id.decode('hex'))
+        except:
+            raise HTTPError(404)
+        org = Organization.get_by('_id', _id)
+        if not org:
+            self.redirect('/admin/organization/list')
+        self.render_template(self.template, title=self.title, org=org)
