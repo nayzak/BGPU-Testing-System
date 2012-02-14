@@ -5,6 +5,7 @@ from application.forms.manage_organization import CreateOrganizationForm, EditOr
 from application.models.organization import Organization
 from pymongo.objectid import ObjectId
 from tornado.web import HTTPError
+from application.views.helpers.tables import Paginator
 
 
 @route('/admin/organization/create')
@@ -30,7 +31,7 @@ class CreateOrganizationHandler(BaseRequest):
             contacts=form.data.get('contacts', list())
         )
         self.flash.success = 'Учебное заведение успешно добавлено.'
-        self.redirect('/admin')
+        self.redirect('/admin/organization/list')
 
 
 @route(r'/admin/organization/edit/([0-9a-z]+)')
@@ -66,7 +67,7 @@ class EditOrganizationHandler(BaseRequest):
             contacts=form.data.get('contacts', list())
         )
         self.flash.success = 'Информация по учебному заведению успешно сохранена.'
-        self.redirect('/admin')
+        self.redirect('/admin/organization/list')
 
 
 @route('/admin/organization/list')
@@ -86,4 +87,6 @@ class ListOrganizationHandler(BaseRequest):
                 'edit': ('/admin/organization/edit/{}', '_id')
             }
         }
-        self.render_template(self.template, title=self.title, data=Organization.get_all(), fields=renderer_args)
+        page = self.get_argument('page', 0)
+        paginator = Paginator(Organization.get_all(), self.request.full_url(), page, 5)
+        self.render_template(self.template, title=self.title, data=paginator.page, fields=renderer_args, paginator=paginator)
