@@ -1,6 +1,7 @@
 #coding: utf-8
 from whirlwind.db.mongo import Mongo
 from mongokit import *
+from pymongo import ASCENDING, DESCENDING
 
 
 @Mongo.db.connection.register
@@ -67,3 +68,7 @@ class Organization(Document):
     @staticmethod
     def get_by(field, value):
         return Mongo.db.ui.organizations.Organization.find_one({field: value})
+
+    @staticmethod
+    def get_all(sorter='_id', direction=1):
+        return Mongo.db.ui.organizations.find().sort(sorter, ASCENDING if direction is 1 else DESCENDING)

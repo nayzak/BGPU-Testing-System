@@ -56,7 +56,8 @@ middleware_classes = [
 ]
 
 mako_extra_imports = [
-    "from application.views.helpers.forms import render_form"
+    "from application.views.helpers.forms import render_form",
+    "from application.views.helpers.tables import render_data_list"
 ]
 
 smtp_host = "smtp.mail.ru"

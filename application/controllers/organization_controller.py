@@ -67,3 +67,23 @@ class EditOrganizationHandler(BaseRequest):
         )
         self.flash.success = 'Информация по учебному заведению успешно сохранена.'
         self.redirect('/admin')
+
+
+@route('/admin/organization/list')
+class ListOrganizationHandler(BaseRequest):
+    title = 'Учебные заведения'
+    template = '/admin/data_list.html'
+
+    @role_required('tutor')
+    def get(self):
+        renderer_args = {
+            'name': 'Название',
+            'full_name': 'Полное название',
+            'status': 'Статус',
+            'contacts.city': 'Город',
+            'links': {
+                'remove': ('/admin/organization/remove/{}', '_id'),
+                'edit': ('/admin/organization/edit/{}', '_id')
+            }
+        }
+        self.render_template(self.template, title=self.title, data=Organization.get_all(), fields=renderer_args)
