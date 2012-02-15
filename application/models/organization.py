@@ -76,3 +76,9 @@ class Organization(Document):
     @staticmethod
     def remove(_id):
         Mongo.db.ui.organizations.remove({'_id': _id})
+
+    @staticmethod
+    def select_field_choises():
+        choises = map(lambda d: (unicode(d['_id']), d['name']), Mongo.db.ui.organizations.find().sort('name', ASCENDING))
+        choises.insert(0, ('0', 'Выберите учебное заведение'))
+        return choises

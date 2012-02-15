@@ -13,6 +13,10 @@ LINKS = {
         'title': 'Подробный просмотр',
         'icon': 'icon-list-alt'
     },
+    'chpass': {
+        'title': 'Сменить пароль',
+        'icon': 'icon-qrcode'
+    }
 }
 
 
@@ -29,12 +33,12 @@ def render_data_list(data, fields, actions, url):
             field = db_field.split('.')
             val = doc
             for f in field:
-                if type(val).__name__ == 'dict':
+                if type(val).__name__ == 'dict' and f in val:
                     val = val[f]
                 elif type(val).__name__ == 'list' and len(val):
                     val = val[0][f]
                 else:
-                    val = 'n/a'
+                    val = ''
             table += '<td>{}</td>'.format(val)
         table += '<td>'
         for type_, link in actions.items():

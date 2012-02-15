@@ -87,7 +87,7 @@ class ListOrganizationHandler(BaseRequest):
                         'view': ('/admin/organization/{}', '_id')}
         }
         page = self.get_argument('page', 0)
-        sort = self.get_argument('sort', '_id')
+        sort = self.get_argument('sort', 'name')
         dest = self.get_argument('dest', 1)
         paginator = Paginator(Organization.get_all(sort, dest), self.request.full_url(), page, 10)
         self.render_template(

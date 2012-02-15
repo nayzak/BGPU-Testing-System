@@ -40,8 +40,8 @@
   left: 5px;
 }
 
-#full_name {
-  width: 500px !important;
+#full_name, #position {
+  width: 600px !important;
 }
 
 .alert {
