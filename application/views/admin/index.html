@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-<%inherit file="/layouts/htmlPage.html" />
+<%inherit file="/layouts/admin.html" />
 
 ### Template for content pages
 <%def name="body()">
-<div class="row">
-    <div class="span6 offset4">
-        <a href="/admin/profile/edit">Редактировать администратора</a>
-        <h1>Добро пожаловать, ${user.name.first}</h1>
-    </div>
-</div>
+    <h1>Добро пожаловать, ${current_user.name.first}</h1>
 </%def>

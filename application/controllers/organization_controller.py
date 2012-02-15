@@ -84,8 +84,7 @@ class ListOrganizationHandler(BaseRequest):
                        ('contacts.city', 'Город')],
             'actions': {'remove': ('/admin/organization/remove/{}', '_id'),
                         'edit': ('/admin/organization/edit/{}', '_id'),
-                        'view': ('/admin/organization/{}', '_id')},
-            'url': self.request.full_url()
+                        'view': ('/admin/organization/{}', '_id')}
         }
         page = self.get_argument('page', 0)
         sort = self.get_argument('sort', '_id')

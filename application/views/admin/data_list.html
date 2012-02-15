@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-<%inherit file="/layouts/htmlPage.html" />
+<%inherit file="/layouts/admin.html" />
 
 ### Template for content pages
 <%def name="body()">
-<div class="container">
-        ${render_data_list(data, **list_args)}
-        ${unicode(paginator)}
-</div>
+    ${render_data_list(data=data, url=handler.request.full_url(), **list_args)}
+    ${unicode(paginator)}
 </%def>

@@ -1,0 +1,46 @@
+# -*- coding: utf-8 -*-
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container" style="width:auto;">
+            <a class="brand" href="/admin">BTS</a>
+            <ul class="nav">
+                <li><a href="/admin/organization/list">Учебные заведения</a></li>
+            </ul>
+            ${current_user | render_profile_menu}
+        </div>
+    </div>
+</div>
+% if flash:
+    % if 'error' in flash:
+        <div class="alert alert-error">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            % for msg in flash['error']:
+                ${msg}<br>
+            % endfor
+        </div>
+    % endif
+    % if 'notice' in flash:
+        <div class="alert alert-warning">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            % for msg in flash['notice']:
+                ${msg}<br>
+            % endfor
+        </div>
+    % endif
+    % if 'info' in flash:
+        <div class="alert alert-success">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            % for msg in flash['info']:
+                ${msg}<br>
+            % endfor
+        </div>
+    % endif
+    % if 'success' in flash:
+        <div class="alert alert-success">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            % for msg in flash['success']:
+                ${msg}<br>
+            % endfor
+        </div>
+    % endif
+% endif

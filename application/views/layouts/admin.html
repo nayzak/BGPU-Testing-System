@@ -3,11 +3,8 @@
 
 ### Template for content pages
 <%def name="body()">
-<div class='container'>
-<div class="row">
-    <div class="span6 offset3">
-        ${form | render_form}
+    <div class="container">
+        <%include file="/admin/header.html"/>
+        ${next.body()}
     </div>
-</div>
-</div>
 </%def>

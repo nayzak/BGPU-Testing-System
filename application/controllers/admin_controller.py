@@ -8,9 +8,12 @@ from tornado.web import HTTPError
 
 @route('/admin')
 class IndexHandler(BaseRequest):
-    @role_required('admin')
+    title = 'Панель управления'
+    template = '/admin/index.html'
+
+    @role_required('tutor')
     def get(self):
-        self.render_template('/admin/index.html', user=self.current_user, title='Панель управления')
+        self.render_template(self.template, title=self.title)
 
 
 @route('/admin/init')
