@@ -21,7 +21,7 @@ def render_profile_menu(user):
                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{}<b class="caret"></b></a>\
                    <ul class="dropdown-menu">\
                       <li><a href="{}"><i class="icon-user"></i>&nbsp;Просмотр</a></li>\
-                      <li><a href="{}"><i class="icon-pencil"></i>&nbsp;Редактировать</a></li>\
+                      <li><a href="{}"><i class="icon-edit"></i>&nbsp;Редактировать</a></li>\
                       <li><a href="{}"><i class="icon-qrcode"></i>&nbsp;Сменить пароль</a></li>\
                       <li class="divider"></li>\
                       <li><a href="{}"><i class="icon-off"></i>&nbsp;Выйти</a></li>\

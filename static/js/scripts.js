@@ -1,15 +1,16 @@
 (function() {
   $(function() {
     $('.control-group .remove-button').live('click', function() {
-      var block;
-      block = $(this).parent();
-      block.prev().find('> .add-button, > .remove-button').show();
-      block.remove();
+      $(this).parent().remove();
       return false;
     });
     return $('.control-group .add-button').live('click', function() {
-      var clone, el, id, t_id, template, _i, _len, _ref;
+      var clone, el, id, t_id, template, tmp_id, _i, _len, _ref;
       template = $(this).parent();
+      tmp_id = template.attr('id').split('-');
+      tmp_id.pop();
+      tmp_id = tmp_id.join('-');
+      template = template.parent().find('>[id^=' + tmp_id + ']:last');
       clone = template.clone();
       t_id = template.attr('id');
       id = t_id.split('-');
@@ -26,9 +27,9 @@
         if (el.attr('name')) {
           el.attr('name', el.attr('name').replace(t_id, id));
         }
+        el.attr('value', '');
       }
       template.after(clone);
-      template.find('> .add-button, > .remove-button').hide();
       return false;
     });
   });

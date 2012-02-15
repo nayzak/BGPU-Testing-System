@@ -47,3 +47,7 @@
 .alert {
   text-align: center !important;
 }
+
+td .action {
+  margin: 0 3px 0 3px;
+}

@@ -1,14 +1,16 @@
 $ ->
     #удалить элемент из FieldList
     $('.control-group .remove-button').live 'click', ->
-        block = $(@).parent()
-        block.prev().find('> .add-button, > .remove-button').show()
-        block.remove()
+        $(@).parent().remove()
         return false
 
     #добавить элемент в FieldList
     $('.control-group .add-button').live 'click', ->
         template = $(@).parent()
+        tmp_id = template.attr('id').split('-')
+        tmp_id.pop()
+        tmp_id = tmp_id.join('-')
+        template = template.parent().find('>[id^=' + tmp_id + ']:last')
         clone = template.clone()
         t_id = template.attr('id')
         id = t_id.split('-')
@@ -19,6 +21,6 @@ $ ->
             el = $(el)
             el.attr('id', el.attr('id').replace(t_id, id)) if el.attr('id')
             el.attr('name', el.attr('name').replace(t_id, id)) if el.attr('name')
+            el.attr('value', '')
         template.after(clone)
-        template.find('> .add-button, > .remove-button').hide()
         return false

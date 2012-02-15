@@ -7,7 +7,7 @@ LINKS = {
     },
     'edit': {
         'title': 'Редактировать',
-        'icon': 'icon-pencil'
+        'icon': 'icon-edit'
     },
     'view': {
         'title': 'Подробный просмотр',
