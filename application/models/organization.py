@@ -68,6 +68,10 @@ class Organization(Document):
             {'organization.id': _id},
             {'$set': {'organization.name': name}}
         )
+        Mongo.db.ui.groups.update(
+            {'organization.id': _id},
+            {'$set': {'organization.name': name}}
+        )
 
     @staticmethod
     def get_by(field, value):
@@ -82,7 +86,8 @@ class Organization(Document):
         Mongo.db.ui.organizations.remove({'_id': _id})
 
     @staticmethod
-    def select_field_choises():
+    def select_field_choises(blank_element=True):
         choises = map(lambda d: (unicode(d['_id']), d['name']), Mongo.db.ui.organizations.find().sort('name', ASCENDING))
-        choises.insert(0, ('0', 'Выберите учебное заведение'))
+        if blank_element:
+            choises.insert(0, ('0', 'Выберите учебное заведение'))
         return choises

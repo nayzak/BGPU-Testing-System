@@ -101,7 +101,7 @@ class RemoveTutorHandler(BaseRequest):
 
 
 @route('/admin/tutor/list')
-class ListOrganizationHandler(BaseRequest):
+class ListTutorHandler(BaseRequest):
     title = 'Преподаватели'
     template = '/admin/data_list.html'
 

@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+<%inherit file="/layouts/admin.html" />
+
+<%def name="body()">
+<div class="container">
+    <h1>Группа ${group.name}&nbsp;
+    % if group.graduated:
+        (выпуск)
+    % else:
+        (${unicode(group.get_course())} курс)
+    % endif
+    <em>${group.organization.name}</em>
+    </h1>
+    <strong>${group.profession}</strong>
+    <p>
+        <a href="/admin/group/edit/${unicode(group._id)}">редактировать</a>
+        <a href="/admin/group/remove/${unicode(group._id)}">удалить</a>
+        <a href="/admin/group/list">к списку</a>
+    </p>
+</div>
+</%def>

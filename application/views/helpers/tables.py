@@ -1,5 +1,6 @@
 #coding: utf-8
 from whirlwind.view.paginator import Paginator
+from mongokit.document import Document
 LINKS = {
     'remove': {
         'title': 'Удалить',
@@ -23,22 +24,32 @@ LINKS = {
 def render_data_list(data, fields, actions, url):
     table = '<table class="table table-striped table-bordered">'
     table += '<thead><tr>'
-    for db_field, field in fields:
-            table += '<th><a href="{}" title="Сортировать">{}</a></th>'.format(_generate_sorter_link(url, db_field), field)
+    for field in fields:
+        db_field, field, render_fn = field[0], field[1], field[2] if len(field) > 2 else None
+        table += '<th><a href="{}" title="Сортировать">{}</a></th>'.format(_generate_sorter_link(url, db_field), field)
     table += '<th>Действия</th>'
     table += '</tr></thead><tbody>'
     for doc in data:
         table += '<tr>'
-        for db_field, field in fields:
+        for field in fields:
+            db_field, field, render_fn = field[0], field[1], field[2] if len(field) > 2 else None
             field = db_field.split('.')
             val = doc
             for f in field:
-                if type(val).__name__ == 'dict' and f in val:
+                try:
+                    is_callable = callable(val.__getattribute__(f))
+                except:
+                    is_callable = False
+                if is_callable:
+                    val = val.__getattribute__(f)()
+                elif hasattr(val, '__getitem__') and f in val:
                     val = val[f]
                 elif type(val).__name__ == 'list' and len(val):
                     val = val[0][f]
                 else:
                     val = ''
+            if render_fn:
+                val = render_fn(val, doc)
             table += '<td>{}</td>'.format(val)
         table += '<td>'
         for type_, link in actions.items():
