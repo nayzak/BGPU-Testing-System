@@ -2,6 +2,7 @@
 from whirlwind.db.mongo import Mongo
 from mongokit import *
 import datetime
+import hashlib
 
 
 @Mongo.db.connection.register
@@ -36,6 +37,17 @@ class User(Document):
     @staticmethod
     def get_by(field, value):
         return Mongo.db.ui.users.User.find_one({field: value})
+
+    @staticmethod
+    def destroy_session(userid):
+        Mongo.db.ui.sessions.remove({'username': userid})
+
+    @staticmethod
+    def chpass(_id, password):
+        Mongo.db.ui.users.update(
+            {'_id': _id},
+            {'$set': {'password': hashlib.sha1(password).hexdigest()}}
+        )
 
     def update_history(self):
         self.history.last_login = datetime.datetime.utcnow()

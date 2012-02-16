@@ -49,3 +49,7 @@ class Admin(User):
                       'email': email}
             }
         )
+
+    @staticmethod
+    def get_admin():
+        return Mongo.db.ui.users.Admin.find_one({'_type': 'Admin'})

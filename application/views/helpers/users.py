@@ -5,15 +5,14 @@ def render_profile_menu(user):
     if not user:
         return ''
     name = ' '.join((user.name.last, user.name.first))
+    ch_pass = '/admin/profile/chpass/{}'.format(user._id)
     logout = '/logout'
     if user._type == 'Admin':
         show = '/admin/profile/show'
         edit = '/admin/profile/edit'
-        ch_pass = '/admin/profile/chpass'
     elif user._type == 'Tutor':
         show = '/admin/tutor/{}'.format(user._id)
         edit = '/admin/tutor/edit/{}'.format(user._id)
-        ch_pass = '/admin/tutor/chpass/{}'.format(user._id)
     else:
         return ''
     header = '<ul class="nav pull-right">\

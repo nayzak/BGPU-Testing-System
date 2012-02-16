@@ -32,4 +32,4 @@ class LogOutHandler(BaseRequest):
     def get(self):
         self.session['user_id'] = None
         self.session.destroy()
-        self.redirect('/')
+        self.redirect('/admin')

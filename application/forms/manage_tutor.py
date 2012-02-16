@@ -30,3 +30,21 @@ class EditTutorForm(Form):
     password = PasswordField('Пароль', [validators.required(), authorized('users', '_id', 'userid', message='Неверный пароль')])
     userid = HiddenField()
     submit = SubmitField('Сохранить')
+
+
+class ChpassForm(Form):
+    title = 'Смена пароля'
+
+    oldpass = PasswordField('Текущий пароль', [validators.required(), authorized('users', '_id', 'userid', message='Неверный пароль')])
+    password = PasswordField('Новый пароль', [validators.required(), validators.length(min=6)])
+    password_confirmation = PasswordField('Подтвердите пароль', [validators.required(), validators.equal_to('password')])
+    userid = HiddenField()
+    submit = SubmitField('Сменить пароль')
+
+
+class AdminChpassForm(Form):
+    title = 'Смена пароля'
+
+    password = PasswordField('Новый пароль', [validators.required(), validators.length(min=6)])
+    password_confirmation = PasswordField('Подтвердите пароль', [validators.required(), validators.equal_to('password')])
+    submit = SubmitField('Сменить пароль')

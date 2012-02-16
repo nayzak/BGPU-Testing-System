@@ -1,6 +1,7 @@
 #coding: utf-8
 from lib.request import BaseRequest
-from whirlwind.view.decorators import role_required, route
+from whirlwind.view.decorators import route
+from lib.decorators import role_required
 from application.forms.manage_organization import CreateOrganizationForm, EditOrganizationForm
 from application.models.organization import Organization
 from pymongo.objectid import ObjectId

@@ -1,6 +1,7 @@
 #coding: utf-8
 from lib.request import BaseRequest
-from whirlwind.view.decorators import route, role_required
+from whirlwind.view.decorators import route
+from lib.decorators import role_required
 from application.forms.manage_tutor import CreateTutorForm, EditTutorForm
 from application.models.tutor import Tutor
 from application.views.helpers.tables import Paginator
@@ -114,7 +115,7 @@ class ListOrganizationHandler(BaseRequest):
                        ('organization.name', 'Учебное заведение')],
             'actions': {'remove': ('/admin/tutor/remove/{}', '_id'),
                         'edit': ('/admin/tutor/edit/{}', '_id'),
-                        'chpass': ('/admin/tutor/chpass/{}', '_id'),
+                        'chpass': ('/admin/profile/chpass/{}', '_id'),
                         'view': ('/admin/tutor/{}', '_id')}
         }
         page = self.get_argument('page', 0)
@@ -128,6 +129,7 @@ class ListOrganizationHandler(BaseRequest):
             list_args=list_args,
             paginator=paginator
         )
+
 
 @route(r'/admin/tutor/([a-z0-9]+)')
 class ViewTutorHandler(BaseRequest):

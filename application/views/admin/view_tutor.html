@@ -5,16 +5,20 @@
 <%def name="body()">
 <div class="container">
     <h1>${' '.join((tutor.name.last, tutor.name.first, tutor.name.middle))}</h1>
-    % if len(tutor.organization):
+    % if 'organization' in tutor and len(tutor.organization):
     <strong><a href="/admin/organization/${unicode(tutor.organization.id)}">${tutor.organization.name}</a></strong>
     % endif
+    % if 'position' in tutor:
     <em>${tutor.position}</em>
+    % endif
     <p>
-        <a href="mailto:{$tutor.email}">написать письмо</a>
+        <a href="mailto:${tutor.email}">написать письмо</a>
+        % if tutor._type == 'Tutor':
         <br>
         <a href="/admin/tutor/edit/${unicode(tutor._id)}">редактировать</a>
         <a href="/admin/tutor/remove/${unicode(tutor._id)}">удалить</a>
         <a href="/admin/tutor/list">к списку</a>
+        % endif
     </p>
 </div>
 </%def>

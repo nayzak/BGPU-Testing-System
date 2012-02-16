@@ -1,9 +1,12 @@
 # coding: utf-8
 from lib.request import BaseRequest
-from whirlwind.view.decorators import route, role_required
+from whirlwind.view.decorators import route
+from lib.decorators import role_required
 from application.models.admin import Admin
 from application.forms.manage_admin import CreateAdminForm, EditAdminForm
+from application.forms.manage_tutor import ChpassForm, AdminChpassForm
 from tornado.web import HTTPError
+from pymongo.objectid import ObjectId
 
 
 @route('/admin')
@@ -82,3 +85,63 @@ class EditAdminHandler(BaseRequest):
         )
         self.flash.success = 'Профиль администратора успешно сохранен.'
         self.redirect('/admin')
+
+
+@route('/admin/profile/show')
+class ViewTutorHandler(BaseRequest):
+    title = 'Профиль администратора'
+    template = '/admin/view_tutor.html'
+
+    @role_required('tutor')
+    def get(self):
+        admin = Admin.get_admin()
+        self.render_template(self.template, title=self.title, tutor=admin)
+
+
+@route(r'/admin/profile/chpass/([0-9a-z]+)')
+class ChpassHandler(BaseRequest):
+    title = 'Смена пароля'
+    template = '/admin/create_admin.html'
+
+    @role_required('tutor')
+    def get(self, _id):
+        try:
+            _id = ObjectId(_id.decode('hex'))
+        except:
+            raise HTTPError(404)
+        if self.current_user['_type'] != 'Admin' and self.current_user['_id'] != _id:
+            raise HTTPError(403)
+        form = None
+        if self.current_user['_id'] == _id:
+            form = ChpassForm(userid=unicode(_id))
+        elif self.current_user['_type'] == 'Admin':
+            form = AdminChpassForm()
+        else:
+            raise HTTPError(403)
+        self.render_template(self.template, title=self.title, form=form)
+
+    @role_required('tutor')
+    def post(self, _id):
+        try:
+            _id = ObjectId(_id.decode('hex'))
+        except:
+            raise HTTPError(404)
+        if self.current_user['_type'] != 'Admin' and self.current_user['_id'] != _id:
+            raise HTTPError(403)
+        form = None
+        if self.current_user['_id'] == _id:
+            form = ChpassForm(self.request.arguments)
+        elif self.current_user['_type'] == 'Admin':
+            form = AdminChpassForm(self.request.arguments)
+        else:
+            raise HTTPError(403)
+        if not form.validate():
+            self.render_template(self.template, title=self.title, form=form)
+            return
+        Admin.chpass(_id, form.data['password'])
+        self.flash.success = 'Пароль успешно изменен'
+        if self.current_user['_id'] == _id:
+            self.redirect('/logout')
+        else:
+            Admin.destroy_session(_id)
+            self.redirect('/admin/tutor/list')

@@ -64,6 +64,10 @@ class Organization(Document):
                       'contacts': contacts}
             }
         )
+        Mongo.db.ui.users.update(
+            {'organization.id': _id},
+            {'$set': {'organization.name': name}}
+        )
 
     @staticmethod
     def get_by(field, value):
