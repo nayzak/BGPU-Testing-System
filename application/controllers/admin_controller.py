@@ -98,17 +98,14 @@ class ViewTutorHandler(BaseRequest):
         self.render_template(self.template, title=self.title, tutor=admin)
 
 
-@route(r'/admin/profile/chpass/([0-9a-z]+)')
+@route(r'/admin/profile/chpass/([0-9a-f]{24})')
 class ChpassHandler(BaseRequest):
     title = 'Смена пароля'
     template = '/admin/create_admin.html'
 
     @role_required('tutor')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         if self.current_user['_type'] != 'Admin' and self.current_user['_id'] != _id:
             raise HTTPError(403)
         form = None
@@ -122,10 +119,7 @@ class ChpassHandler(BaseRequest):
 
     @role_required('tutor')
     def post(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         if self.current_user['_type'] != 'Admin' and self.current_user['_id'] != _id:
             raise HTTPError(403)
         form = None

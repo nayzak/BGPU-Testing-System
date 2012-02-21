@@ -37,17 +37,14 @@ class CreateTutorHandler(BaseRequest):
         self.redirect('/admin/tutor/list')
 
 
-@route(r'/admin/tutor/edit/([0-9a-z]+)')
+@route(r'/admin/tutor/edit/([0-9a-f]{24})')
 class EditTutorHandler(BaseRequest):
     title = 'Редактирование профиля преподавателя'
     template = '/admin/create_admin.html'
 
     @role_required('tutor')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         if self.current_user['_type'] != 'Admin' and self.current_user['_id'] != _id:
             raise HTTPError(403)
         tutor = Tutor.get_by('_id', _id)
@@ -64,10 +61,7 @@ class EditTutorHandler(BaseRequest):
 
     @role_required('tutor')
     def post(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         if self.current_user['_type'] != 'Admin' and self.current_user['_id'] != _id:
             raise HTTPError(403)
         form = EditTutorForm(self.request.arguments)
@@ -87,14 +81,11 @@ class EditTutorHandler(BaseRequest):
         self.redirect('/admin/tutor/list')
 
 
-@route(r'/admin/tutor/remove/([a-z0-9]+)')
+@route(r'/admin/tutor/remove/([a-f0-9]{24})')
 class RemoveTutorHandler(BaseRequest):
     @role_required('admin')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         Tutor.remove(_id)
         self.flash.success = 'Преподаватель успешно удален.'
         self.redirect(self.request.headers.get('Referer', '/admin/tutor/list'))
@@ -131,17 +122,14 @@ class ListTutorHandler(BaseRequest):
         )
 
 
-@route(r'/admin/tutor/([a-z0-9]+)')
+@route(r'/admin/tutor/([a-f0-9]{24})')
 class ViewTutorHandler(BaseRequest):
     title = 'Профиль преподавателя'
     template = '/admin/view_tutor.html'
 
     @role_required('tutor')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         tutor = Tutor.get_by('_id', _id)
         if not tutor:
             self.redirect('/admin/tutor/list')

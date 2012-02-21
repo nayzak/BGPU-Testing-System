@@ -5,8 +5,6 @@ from whirlwind.view.decorators import route
 from application.models.group import Group
 from application.forms.manage_group import CreateGroupForm, EditGroupForm
 from pymongo.objectid import ObjectId
-from tornado.web import HTTPError
-import datetime
 from application.views.helpers.tables import Paginator
 
 
@@ -37,17 +35,14 @@ class CreateGroupHandler(BaseRequest):
         self.redirect('/admin/group/list')
 
 
-@route(r'/admin/group/edit/([0-9a-z]+)')
+@route(r'/admin/group/edit/([0-9a-f]{24})')
 class EditGroupHandler(BaseRequest):
     title = 'Редактирование группы'
     template = '/admin/create_admin.html'
 
     @role_required('tutor')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         group = Group.get_by('_id', _id)
         form = EditGroupForm(
             name=group.name,
@@ -60,10 +55,7 @@ class EditGroupHandler(BaseRequest):
 
     @role_required('tutor')
     def post(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         form = EditGroupForm(self.request.arguments)
         if not form.validate():
             self.render_template(self.template, title=self.title, form=form)
@@ -80,14 +72,11 @@ class EditGroupHandler(BaseRequest):
         self.redirect('/admin/group/list')
 
 
-@route(r'/admin/group/remove/([a-z0-9]+)')
+@route(r'/admin/group/remove/([a-f0-9]{24})')
 class RemoveGroupHandler(BaseRequest):
     @role_required('admin')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         Group.remove(_id)
         self.flash.success = 'Группа успешно удаленa.'
         self.redirect(self.request.headers.get('Referer', '/admin/group/list'))
@@ -122,17 +111,14 @@ class ListGroupHandler(BaseRequest):
         )
 
 
-@route(r'/admin/group/([a-z0-9]+)')
+@route(r'/admin/group/([a-f0-9]{24})')
 class ViewGroupHandler(BaseRequest):
     title = 'Группа'
     template = '/admin/view_group.html'
 
     @role_required('tutor')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         group = Group.get_by('_id', _id)
         if not group:
             self.redirect('/admin/group/list')

@@ -35,27 +35,21 @@ class CreateOrganizationHandler(BaseRequest):
         self.redirect('/admin/organization/list')
 
 
-@route(r'/admin/organization/edit/([0-9a-z]+)')
+@route(r'/admin/organization/edit/([0-9a-f]{24})')
 class EditOrganizationHandler(BaseRequest):
     title = 'Редактирование учебного заведения'
     template = '/admin/create_organization.html'
 
     @role_required('admin')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         org = Organization.get_by('_id', _id)
         form = EditOrganizationForm(obj=org)
         self.render_template(self.template, form=form, title=self.title)
 
     @role_required('admin')
     def post(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         form = CreateOrganizationForm(self.request.arguments)
         if not form.validate():
             self.render_template(self.template, form=form, title=self.title)
@@ -100,30 +94,24 @@ class ListOrganizationHandler(BaseRequest):
         )
 
 
-@route(r'/admin/organization/remove/([0-9a-z]+)')
+@route(r'/admin/organization/remove/([0-9a-f]{24})')
 class RemoveOrganizationHandler(BaseRequest):
     @role_required('admin')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         Organization.remove(_id)
         self.flash.success = 'Учебное заведение успешно удалено'
         self.redirect(self.request.headers.get('Referer', '/admin/organization/list'))
 
 
-@route(r'/admin/organization/([0-9a-z]+)')
+@route(r'/admin/organization/([0-9a-f]{24})')
 class ViewOrganizationHandler(BaseRequest):
     title = 'Просмотр учебного заведения'
     template = '/admin/view_organization.html'
 
     @role_required('tutor')
     def get(self, _id):
-        try:
-            _id = ObjectId(_id.decode('hex'))
-        except:
-            raise HTTPError(404)
+        _id = ObjectId(_id.decode('hex'))
         org = Organization.get_by('_id', _id)
         if not org:
             self.redirect('/admin/organization/list')
