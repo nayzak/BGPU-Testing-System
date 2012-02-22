@@ -35,7 +35,7 @@ class CreateStudentHandler(BaseRequest):
         self.redirect('/admin/student/list')
 
 @route('/admin/student/list')
-class ListTutorHandler(BaseRequest):
+class ListStudentHandler(BaseRequest):
     title = 'Студенты'
     template = '/admin/data_list.html'
 
@@ -46,10 +46,10 @@ class ListTutorHandler(BaseRequest):
                        ('name.first', 'Имя'),
                        ('name.middle', 'Отчество'),
                        ('group.name', 'Группа')],
-            'actions': {'remove': ('/admin/tutor/remove/{}', '_id'),
-                        'edit': ('/admin/tutor/edit/{}', '_id'),
+            'actions': {'remove': ('/admin/student/remove/{}', '_id'),
+                        'edit': ('/admin/student/edit/{}', '_id'),
                         'chpass': ('/admin/profile/chpass/{}', '_id'),
-                        'view': ('/admin/tutor/{}', '_id')}
+                        'view': ('/admin/student/{}', '_id')}
         }
         page = self.get_argument('page', 0)
         sort = self.get_argument('sort', 'name.last')
