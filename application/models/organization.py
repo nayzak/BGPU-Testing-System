@@ -56,6 +56,7 @@ class Organization(Document):
 
     @staticmethod
     def update_organization(_id, name, full_name, status, contacts):
+        print (_id)
         Mongo.db.ui.organizations.update(
             {'_id': _id},
             {'$set': {'name': name,
@@ -88,6 +89,7 @@ class Organization(Document):
     @staticmethod
     def select_field_choises(blank_element=True):
         choises = map(lambda d: (unicode(d['_id']), d['name']), Mongo.db.ui.organizations.find().sort('name', ASCENDING))
+        print (choises)
         if blank_element:
             choises.insert(0, ('0', 'Выберите учебное заведение'))
         return choises

@@ -26,13 +26,11 @@ class Student(User):
     default_values = {'roles': ['student']}
 
     @staticmethod
-    def instance(first_name, middle_name, last_name, email, password, group_id):
+    def instance(first_name, middle_name, last_name, group_id):
         student = Student()
         student.name.first = first_name
         student.name.middle = middle_name
         student.name.last = last_name
-        student.email = email
-        student.password = hashlib.sha1(password).hexdigest()
         try:
             group_id = ObjectId(group_id.decode('hex'))
             group = Group.get_by('_id', group_id)
@@ -49,8 +47,8 @@ class Student(User):
         return student
 
     @staticmethod
-    def create_student(first_name, middle_name, last_name, email, password, group_id):
-        student = Student.instance(first_name, middle_name, last_name, email, password, group_id)
+    def create_student(first_name, middle_name, last_name, group_id):
+        student = Student.instance(first_name, middle_name, last_name, group_id)
         Mongo.db.ui.users.insert(student)
         return student
 
@@ -58,3 +56,6 @@ class Student(User):
     def get_all(sorter='_id', direction=1):
         return Mongo.db.ui.users.find({'_type': 'Student'}).sort(sorter, ASCENDING if int(direction) == 1 else DESCENDING)
 
+    @staticmethod
+    def remove(_id):
+        Mongo.db.ui.users.remove({'_id': _id})

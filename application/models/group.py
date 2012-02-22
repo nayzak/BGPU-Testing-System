@@ -56,7 +56,11 @@ class Group(Document):
                       'created_at': created_at,
                       'graduated': graduated,
                       'organization.id': organization_id,
-                      'Organization.name': Organization.get_by('_id', organization_id).name}}
+                      'organization.name': Organization.get_by('_id', organization_id).name}}
+        )
+        Mongo.db.ui.users.update(
+            {'group.id': _id},
+            {'$set': {'group.name': name, 'organization.name': Organization.get_by('_id', organization_id).name, 'course': Group.get_by('_id', _id).get_course()}}
         )
 
     @staticmethod

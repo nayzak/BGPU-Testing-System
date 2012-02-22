@@ -5,8 +5,8 @@ from lib.decorators import role_required
 from application.models.student import Student
 from application.forms.manage_student import CreateStudentForm
 from application.views.helpers.tables import Paginator
+from pymongo.objectid import ObjectId
 #from tornado.web import HTTPError
-#from pymongo.objectid import ObjectId
 
 @route('/admin/student/create')
 class CreateStudentHandler(BaseRequest):
@@ -27,8 +27,6 @@ class CreateStudentHandler(BaseRequest):
             first_name=form.data['first_name'],
             middle_name=form.data['middle_name'],
             last_name=form.data['last_name'],
-            email=form.data['email'],
-            password=form.data['password'],
             group_id=form.data['group_id']
         )
         self.flash.success = 'Студент успешно добавлен'
@@ -64,3 +62,12 @@ class ListStudentHandler(BaseRequest):
             list_args=list_args,
             paginator=paginator
         )
+
+@route(r'/admin/student/remove/([a-f0-9]{24})')
+class RemoveStudentHandler(BaseRequest):
+    @role_required('admin')
+    def get(self, _id):
+        _id = ObjectId(_id.decode('hex'))
+        Student.remove(_id)
+        self.flash.success = 'Студент успешно удален.'
+        self.redirect(self.request.headers.get('Referer', '/admin/student/list'))
