@@ -45,6 +45,8 @@ class ListStudentHandler(BaseRequest):
             'fields': [('name.last', 'Фамилия'),
                        ('name.first', 'Имя'),
                        ('name.middle', 'Отчество'),
+                       ('organization.name', 'Учебное заведение'),
+                       ('course', 'Курс'),
                        ('group.name', 'Группа')],
             'actions': {'remove': ('/admin/student/remove/{}', '_id'),
                         'edit': ('/admin/student/edit/{}', '_id'),

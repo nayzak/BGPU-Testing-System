@@ -14,6 +14,11 @@ class Student(User):
             'id': ObjectId,
             'name': unicode
         },
+        'organization': {
+            'id': ObjectId,
+            'name': unicode
+        },
+        'course': unicode
     }
 
     required_fields = ['group']
@@ -30,10 +35,15 @@ class Student(User):
         student.password = hashlib.sha1(password).hexdigest()
         try:
             group_id = ObjectId(group_id.decode('hex'))
+            group = Group.get_by('_id', group_id)
+            student.course = group.get_course()
             student.group.id = group_id
-            student.group.name = Group.get_by('_id', group_id).name
+            student.group.name = group.name
+            student.organization.id = group.organization.id
+            student.organization.name = group.organization.name
         except:
             student.group = dict()
+            student.organization = dict()
         student.created_at = datetime.datetime.utcnow()
         student.history.num_logins = 0
         return student
