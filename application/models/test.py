@@ -2,6 +2,7 @@ from whirlwind.db.mongo import Mongo
 from pymongo.objectid import ObjectId
 from pymongo import *
 import datetime
+from lib.utils import Solution
 
 
 @Mongo.db.connection.register
@@ -30,7 +31,7 @@ class Test(Document):
         'questions': [dict],
         'executed_date': datetime.datetime,
         'results': {
-            'answers': [unicode],
+            'answers': [Solution],
             'execution_time': int,
             'right_count': int,
             'wrong_count': int,
