@@ -44,11 +44,10 @@ class ListStudentHandler(BaseRequest):
                        ('name.first', 'Имя'),
                        ('name.middle', 'Отчество'),
                        ('organization.name', 'Учебное заведение'),
-                       ('course', 'Курс'),
+                       ('get_course', 'Курс'),
                        ('group.name', 'Группа')],
             'actions': {'remove': ('/admin/student/remove/{}', '_id'),
                         'edit': ('/admin/student/edit/{}', '_id'),
-                        'chpass': ('/admin/profile/chpass/{}', '_id'),
                         'view': ('/admin/student/{}', '_id')}
         }
         page = self.get_argument('page', 0)

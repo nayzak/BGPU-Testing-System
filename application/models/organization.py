@@ -1,8 +1,8 @@
 #coding: utf-8
 from whirlwind.db.mongo import Mongo
+from pymongo.objectid import ObjectId
 from mongokit import *
 from pymongo import ASCENDING, DESCENDING
-
 
 @Mongo.db.connection.register
 class Organization(Document):

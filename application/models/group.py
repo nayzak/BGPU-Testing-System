@@ -60,7 +60,7 @@ class Group(Document):
         )
         Mongo.db.ui.users.update(
             {'group.id': _id},
-            {'$set': {'group.name': name, 'organization.name': Organization.get_by('_id', organization_id).name, 'course': Group.get_by('_id', _id).get_course()}}
+            {'$set': {'group.name': name, 'organization.name': Organization.get_by('_id', organization_id).name}}
         )
 
     @staticmethod
