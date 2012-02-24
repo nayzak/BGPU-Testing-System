@@ -26,7 +26,7 @@ $ ->
         return false
 
     # фильтер в добавление студента
-	$('form select#organization').live 'change', ->
+	$('form select#organization_id').live 'change', ->
 		org_id = $(@).find('option:selected').attr('value')
 		$.ajax({
 				url: '/admin/student/updatelist', 

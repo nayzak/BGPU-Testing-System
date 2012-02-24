@@ -33,7 +33,7 @@
       return false;
     });
   });
-  $('form select#organization').live('change', function() {
+  $('form select#organization_id').live('change', function() {
     var org_id;
     org_id = $(this).find('option:selected').attr('value');
     $.ajax({

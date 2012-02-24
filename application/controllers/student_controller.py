@@ -91,8 +91,10 @@ class EditStudentHandler(BaseRequest):
             middle_name = student.name.middle,
             last_name = student.name.last,
             group_id= student.group.id,
+            organization_id = student.organization.id,
             userid = self.current_user['_id']
         )
+        print(student.organization.id)
         self.render_template(self.template, title=self.title, form=form)
 
     @role_required('tutor')
