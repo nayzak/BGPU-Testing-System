@@ -118,7 +118,10 @@ class EditStudentHandler(BaseRequest):
 class CreateUpdateListHandler(BaseRequest):
 
     def post(self):
-        items =  Group.select_field_choises(ObjectId(self.request.body))
+        try:
+            items =  Group.select_field_choises(ObjectId(self.request.body))
+        except:
+            items = dict()
         data = []
         for item in items:
             data.append({'group_id':item[0], 'name':item[1]})
