@@ -25,19 +25,29 @@ $ ->
         template.after(clone)
         return false
 
+
     # фильтер в добавление студента
-	$('form select#organization').live 'change', ->
-		org_id = $(@).find('option:selected').attr('value')
-		$.ajax({
-				url: '/admin/student/updatelist', 
-				data: org_id, 
-				dataType: "json", 
-				type: "POST", 
-				success: (response) -> 
-						select = $('form select#group_id') 
-						if (response[0])
-								select.empty()
-						for r in response
-								select.append('<option value="'+r.group_id+'">'+r.name+'</option>')
-		})
-		return false
+    ajax_loader = $('<i class="ajax-loader">')
+    ajax_loader.hide()
+    $('form select#group_id').after(ajax_loader)
+
+    $('form select#organization').live 'change', ->
+        org_id = $(@).find('option:selected').attr('value')
+        select = $('form select#group_id')
+        ajax_loader.show()
+        select.prop('disabled', true)
+        $.ajax({
+                url: '/admin/student/updatelist', 
+                data: org_id, 
+                dataType: "json", 
+                type: "POST", 
+                success: (response) -> 
+                         
+                        if (response[0])
+                                select.empty()
+                        for r in response
+                                select.append('<option value="'+r.group_id+'">'+r.name+'</option>')
+                        ajax_loader.hide()
+                        select.prop('disabled', false)
+        })
+        return false
