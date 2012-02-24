@@ -33,4 +33,28 @@
       return false;
     });
   });
+  $('form select#organization').live('click', function() {
+    var org_id;
+    org_id = $(this).find('option:selected').attr('value');
+    $.ajax({
+      url: '/admin/student/updatelist',
+      data: org_id,
+      dataType: "json",
+      type: "POST",
+      success: function(response) {
+        var r, select, _i, _len, _results;
+        select = $('form select#group_id');
+        if (response[0]) {
+          select.empty();
+        }
+        _results = [];
+        for (_i = 0, _len = response.length; _i < _len; _i++) {
+          r = response[_i];
+          _results.push(select.append('<option value="' + r.group_id + '">' + r.name + '</option>'));
+        }
+        return _results;
+      }
+    });
+    return false;
+  });
 }).call(this);

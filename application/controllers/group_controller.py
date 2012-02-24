@@ -23,7 +23,6 @@ class CreateGroupHandler(BaseRequest):
         if not form.validate():
             self.render_template(self.template, title=self.title, form=form)
             return
-        print form.data
         Group.create_group(
             name=form.data['name'],
             profession=form.data['profession'],

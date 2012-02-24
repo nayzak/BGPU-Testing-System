@@ -60,7 +60,7 @@ class Group(Document):
         )
         Mongo.db.ui.users.update(
             {'group.id': _id},
-            {'$set': {'group.name': name, 'organization.name': Organization.get_by('_id', organization_id).name, 'course': Group.get_by('_id', _id).get_course()}}
+            {'$set': {'group.name': name, 'organization.name': Organization.get_by('_id', organization_id).name}}
         )
 
     @staticmethod
@@ -80,11 +80,11 @@ class Group(Document):
         if organization_id is None:
             def select_item(group):
                 return unicode(group._id), '{} ({} курс, {})'.format(group.name, group.get_course(), group.organization.name)
-            choises = map(select_item, Mongo.db.ui.groups.Group.find().sort('name', ASCENDING))
+            choises = map(select_item, Mongo.db.ui.groups.Group.find().sort('name', ASCENDING).sort('created_at', DESCENDING))
         else:
             def select_item(group):
                 return unicode(group._id), '{} ({} курс)'.format(group.name, group.get_course())
-            choises = map(select_item, Mongo.db.ui.groups.Group.find({'organization.id': organization_id}).sort('name', ASCENDING))
+            choises = map(select_item, Mongo.db.ui.groups.Group.find({'organization.id': organization_id}).sort('name', ASCENDING).sort('created_at', DESCENDING))
 
         return choises
 

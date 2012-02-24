@@ -3,15 +3,20 @@ from lib.request import BaseRequest
 from whirlwind.view.decorators import route
 from lib.decorators import role_required
 from application.models.student import Student
-from application.forms.manage_student import CreateStudentForm
+from application.models.student import Group
+from application.forms.manage_student import CreateStudentForm, EditStudentForm
 from application.views.helpers.tables import Paginator
 from pymongo.objectid import ObjectId
-#from tornado.web import HTTPError
+from tornado.web import HTTPError
+import json
 
 @route('/admin/student/create')
 class CreateStudentHandler(BaseRequest):
     title = 'Добавление студента'
     template = '/admin/create_admin.html'
+
+    def filter(self):
+        print ("asdasdsad")
 
     @role_required('admin')
     def get(self):
@@ -44,12 +49,10 @@ class ListStudentHandler(BaseRequest):
                        ('name.first', 'Имя'),
                        ('name.middle', 'Отчество'),
                        ('organization.name', 'Учебное заведение'),
-                       ('course', 'Курс'),
+                       ('get_course', 'Курс'),
                        ('group.name', 'Группа')],
             'actions': {'remove': ('/admin/student/remove/{}', '_id'),
-                        'edit': ('/admin/student/edit/{}', '_id'),
-                        'chpass': ('/admin/profile/chpass/{}', '_id'),
-                        'view': ('/admin/student/{}', '_id')}
+                        'edit': ('/admin/student/edit/{}', '_id')}
         }
         page = self.get_argument('page', 0)
         sort = self.get_argument('sort', 'name.last')
@@ -71,3 +74,55 @@ class RemoveStudentHandler(BaseRequest):
         Student.remove(_id)
         self.flash.success = 'Студент успешно удален.'
         self.redirect(self.request.headers.get('Referer', '/admin/student/list'))
+
+@route(r'/admin/student/edit/([0-9a-f]{24})')
+class EditStudentHandler(BaseRequest):
+    title = 'Редактирование профиля студента'
+    template = '/admin/create_admin.html'
+
+    @role_required('tutor')
+    def get(self, _id):
+        _id = ObjectId(_id.decode('hex'))
+        if self.current_user['_type'] != 'Admin' and self.current_user['_id'] != _id:
+            raise HTTPError(403)
+        student = Student.get_by('_id', _id)
+        form = EditStudentForm(
+            first_name = student.name.first,
+            middle_name = student.name.middle,
+            last_name = student.name.last,
+            group_id= student.group.id,
+            userid = self.current_user['_id']
+        )
+        self.render_template(self.template, title=self.title, form=form)
+
+    @role_required('tutor')
+    def post(self, _id):
+        _id = ObjectId(_id.decode('hex'))
+        if self.current_user['_type'] != 'Admin' and self.current_user['_id'] != _id:
+            raise HTTPError(403)
+        form = EditStudentForm(self.request.arguments)
+        if not form.validate():
+            self.render_template(self.template, title=self.title, form=form)
+            return
+        Student.update_student(
+            _id=_id,
+            first_name=form.data['first_name'],
+            middle_name=form.data['middle_name'],
+            last_name=form.data['last_name'],
+            group_id=form.data['group_id']
+        )
+        self.flash.success = 'Профиль студента успешно изменен.'
+        self.redirect('/admin/student/list')
+
+@route('/admin/student/updatelist')
+class CreateUpdateListHandler(BaseRequest):
+
+    def post(self):
+        try:
+            items =  Group.select_field_choises(ObjectId(self.request.body))
+        except:
+            items = dict()
+        data = []
+        for item in items:
+            data.append({'group_id':item[0], 'name':item[1]})
+        self.write(json.dumps(data))

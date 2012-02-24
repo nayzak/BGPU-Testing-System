@@ -12,13 +12,13 @@ class Student(User):
     structure = {
         'group': {
             'id': ObjectId,
-            'name': unicode
+            'name': unicode,
+            'created_at': datetime.datetime,
         },
         'organization': {
             'id': ObjectId,
             'name': unicode
-        },
-        'course': unicode
+        }
     }
 
     required_fields = ['group']
@@ -34,9 +34,9 @@ class Student(User):
         try:
             group_id = ObjectId(group_id.decode('hex'))
             group = Group.get_by('_id', group_id)
-            student.course = group.get_course()
             student.group.id = group_id
             student.group.name = group.name
+            student.group.created_at = group.created_at
             student.organization.id = group.organization.id
             student.organization.name = group.organization.name
         except:
@@ -59,3 +59,26 @@ class Student(User):
     @staticmethod
     def remove(_id):
         Mongo.db.ui.users.remove({'_id': _id})
+
+    @staticmethod
+    def update_student(_id, first_name, middle_name, last_name, group_id):
+        group = Group.get_by('_id', ObjectId(group_id))
+        print(group)
+        Mongo.db.ui.users.update(
+            {'_id': _id},
+            {'$set': {'name.first': first_name,
+                      'name.middle': middle_name,
+                      'name.last': last_name,
+                      'group.id': group_id,
+                      'group.name': group.name,
+                      'group.created_at': group.created_at,
+                      'organization.id': group.organization.id,
+                      'organization.name': group.organization.name }}
+        )
+
+    @staticmethod
+    def get_by(field, value):
+        return Mongo.db.ui.users.Student.find_one({field: value})
+
+    def get_course(self):
+        return (datetime.datetime.utcnow() - self.created_at).days / 365 + 1
