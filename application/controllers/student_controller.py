@@ -3,15 +3,20 @@ from lib.request import BaseRequest
 from whirlwind.view.decorators import route
 from lib.decorators import role_required
 from application.models.student import Student
+from application.models.student import Group
 from application.forms.manage_student import CreateStudentForm, EditStudentForm
 from application.views.helpers.tables import Paginator
 from pymongo.objectid import ObjectId
 from tornado.web import HTTPError
+import json
 
 @route('/admin/student/create')
 class CreateStudentHandler(BaseRequest):
     title = 'Добавление студента'
     template = '/admin/create_admin.html'
+
+    def filter(self):
+        print ("asdasdsad")
 
     @role_required('admin')
     def get(self):
@@ -108,3 +113,13 @@ class EditStudentHandler(BaseRequest):
         )
         self.flash.success = 'Профиль студента успешно изменен.'
         self.redirect('/admin/student/list')
+
+@route('/admin/student/updatelist')
+class CreateUpdateListHandler(BaseRequest):
+
+    def post(self):
+        items =  Group.select_field_choises(ObjectId(self.request.body))
+        data = []
+        for item in items:
+            data.append({'group_id':item[0], 'name':item[1]})
+        self.write(json.dumps(data))
