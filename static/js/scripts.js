@@ -44,7 +44,9 @@
       success: function(response) {
         var r, select, _i, _len, _results;
         select = $('form select#group_id');
-        select.empty();
+        if (response[0]) {
+          select.empty();
+        }
         _results = [];
         for (_i = 0, _len = response.length; _i < _len; _i++) {
           r = response[_i];

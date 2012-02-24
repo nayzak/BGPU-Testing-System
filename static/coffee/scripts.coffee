@@ -30,7 +30,8 @@ $ ->
 		org_id = $(@).find('option:selected').attr('value')
 		$.ajax({url: '/admin/student/updatelist', data: org_id, dataType: "json", type: "POST", success: (response) -> 
 				select = $('form select#group_id') 
-				select.empty()
+				if (response[0])
+						select.empty()
 				for r in response
 						select.append('<option value="'+r.group_id+'">'+r.name+'</option>')
 		})
