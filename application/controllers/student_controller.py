@@ -94,7 +94,6 @@ class EditStudentHandler(BaseRequest):
             organization_id = student.organization.id,
             userid = self.current_user['_id']
         )
-        print(student.organization.id)
         self.render_template(self.template, title=self.title, form=form)
 
     @role_required('tutor')

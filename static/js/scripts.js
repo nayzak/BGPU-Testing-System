@@ -1,10 +1,11 @@
 (function() {
+  var filter;
   $(function() {
     $('.control-group .remove-button').live('click', function() {
       $(this).parent().remove();
       return false;
     });
-    return $('.control-group .add-button').live('click', function() {
+    $('.control-group .add-button').live('click', function() {
       var clone, el, id, t_id, template, tmp_id, _i, _len, _ref;
       template = $(this).parent();
       tmp_id = template.attr('id').split('-');
@@ -32,29 +33,35 @@
       template.after(clone);
       return false;
     });
+    $.ajax_loader = $('<i class="ajax-loader">');
+    $.ajax_loader.hide();
+    $('form select#group_id').after($.ajax_loader);
+    return $('form select#organization_id').live('change', filter);
   });
-  $('form select#organization_id').live('change', function() {
-    var org_id;
+  filter = function() {
+    var org_id, select;
     org_id = $(this).find('option:selected').attr('value');
+    select = $('form select#group_id');
+    $.ajax_loader.show();
+    select.prop('disabled', true);
     $.ajax({
       url: '/admin/student/updatelist',
       data: org_id,
       dataType: "json",
       type: "POST",
       success: function(response) {
-        var r, select, _i, _len, _results;
-        select = $('form select#group_id');
+        var r, _i, _len;
         if (response[0]) {
           select.empty();
         }
-        _results = [];
         for (_i = 0, _len = response.length; _i < _len; _i++) {
           r = response[_i];
-          _results.push(select.append('<option value="' + r.group_id + '">' + r.name + '</option>'));
+          select.append('<option value="' + r.group_id + '">' + r.name + '</option>');
         }
-        return _results;
+        $.ajax_loader.hide();
+        return select.prop('disabled', false);
       }
     });
     return false;
-  });
+  };
 }).call(this);
