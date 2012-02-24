@@ -1,3 +1,4 @@
+#coding: utf-8
 from application.models.user import User
 from whirlwind.db.mongo import Mongo
 from pymongo.objectid import ObjectId
@@ -54,7 +55,7 @@ class Student(User):
 
     @staticmethod
     def get_all(sorter='_id', direction=1):
-        return Mongo.db.ui.users.find({'_type': 'Student'}).sort(sorter, ASCENDING if int(direction) == 1 else DESCENDING)
+        return Mongo.db.ui.users.Student.find({'_type': 'Student'}).sort(sorter, ASCENDING if int(direction) == 1 else DESCENDING)
 
     @staticmethod
     def remove(_id):
@@ -64,7 +65,7 @@ class Student(User):
     def update_student(_id, first_name, middle_name, last_name, group_id):
         group = Group.get_by('_id', ObjectId(group_id))
         print(group)
-        Mongo.db.ui.users.update(
+        Mongo.db.ui.users.Student.update(
             {'_id': _id},
             {'$set': {'name.first': first_name,
                       'name.middle': middle_name,
