@@ -2,6 +2,7 @@ from whirlwind.db.mongo import Mongo
 from pymongo.objectid import ObjectId
 from pymongo import *
 import datetime
+from lib.utils import Solution
 
 
 @Mongo.db.connection.register
@@ -21,14 +22,13 @@ class Question(Document):
             'module': unicode
         },
         'body': unicode,
-        'type': unicode,
-        'solution': unicode,
+        'solution': Solution,
         'complexity': int,
         'author_id': ObjectId,
         'created_at': datetime.datetime,
         'history': [dict]
     }
 
-    required_fields = ['position', 'position.subject', 'position.module', 'body', 'type', 'solution', 'complexity', 'author_id']
+    required_fields = ['position', 'position.subject', 'position.module', 'body', 'solution', 'complexity', 'author_id']
 
     use_dot_notation = True
