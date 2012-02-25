@@ -5,7 +5,6 @@ from lib.decorators import role_required
 from application.forms.manage_organization import CreateOrganizationForm, EditOrganizationForm
 from application.models.organization import Organization
 from pymongo.objectid import ObjectId
-from tornado.web import HTTPError
 from application.views.helpers.tables import Paginator
 
 
@@ -17,13 +16,13 @@ class CreateOrganizationHandler(BaseRequest):
     @role_required('admin')
     def get(self):
         form = CreateOrganizationForm()
-        self.render_template(self.template, form=form, title=self.title)
+        self.render_template(form=form)
 
     @role_required('admin')
     def post(self):
         form = CreateOrganizationForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, form=form, title=self.title)
+            self.render_template(form=form)
             return
         Organization.create_organization(
             name=form.data.get('name', ''),
@@ -45,14 +44,14 @@ class EditOrganizationHandler(BaseRequest):
         _id = ObjectId(_id.decode('hex'))
         org = Organization.get_by('_id', _id)
         form = EditOrganizationForm(obj=org)
-        self.render_template(self.template, form=form, title=self.title)
+        self.render_template(form=form)
 
     @role_required('admin')
     def post(self, _id):
         _id = ObjectId(_id.decode('hex'))
         form = CreateOrganizationForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, form=form, title=self.title)
+            self.render_template(form=form)
             return
         Organization.update_organization(
             _id=_id,
@@ -86,8 +85,6 @@ class ListOrganizationHandler(BaseRequest):
         dest = self.get_argument('dest', 1)
         paginator = Paginator(Organization.get_all(sort, dest), self.request.full_url(), page, 10)
         self.render_template(
-            self.template,
-            title=self.title,
             data=paginator.page,
             list_args=list_args,
             paginator=paginator
@@ -115,4 +112,4 @@ class ViewOrganizationHandler(BaseRequest):
         org = Organization.get_by('_id', _id)
         if not org:
             self.redirect('/admin/organization/list')
-        self.render_template(self.template, title=self.title, org=org)
+        self.render_template(org=org)

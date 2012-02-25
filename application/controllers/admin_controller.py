@@ -16,7 +16,7 @@ class IndexHandler(BaseRequest):
 
     @role_required('tutor')
     def get(self):
-        self.render_template(self.template, title=self.title)
+        self.render_template()
 
 
 @route('/admin/init')
@@ -29,7 +29,7 @@ class CreateAdminHandler(BaseRequest):
             self.flash.notice = 'Администратор уже зарегистрирован.'
             self.redirect('/admin')
             return
-        self.render_template(self.template, form=CreateAdminForm(), title=self.title)
+        self.render_template(form=CreateAdminForm())
 
     def post(self):
         if Admin.is_admin_created():
@@ -37,7 +37,7 @@ class CreateAdminHandler(BaseRequest):
 
         form = CreateAdminForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, form=form, title=self.title)
+            self.render_template(form=form)
 
         Admin.create_admin(
             form.first_name.data,
@@ -67,7 +67,7 @@ class EditAdminHandler(BaseRequest):
             last_name=self.current_user.name.last,
             middle_name=self.current_user.name.middle,
         )
-        self.render_template(self.template, form=form, title=self.title)
+        self.render_template(form=form)
 
     @role_required('admin')
     def post(self):
@@ -75,7 +75,7 @@ class EditAdminHandler(BaseRequest):
             raise HTTPError(403)
         form = EditAdminForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, form=form, title=self.title)
+            self.render_template(form=form)
             return
         Admin.edit_admin(
             form.first_name.data,
@@ -95,7 +95,7 @@ class ViewTutorHandler(BaseRequest):
     @role_required('tutor')
     def get(self):
         admin = Admin.get_admin()
-        self.render_template(self.template, title=self.title, tutor=admin)
+        self.render_template(tutor=admin)
 
 
 @route(r'/admin/profile/chpass/([0-9a-f]{24})')
@@ -115,7 +115,7 @@ class ChpassHandler(BaseRequest):
             form = AdminChpassForm()
         else:
             raise HTTPError(403)
-        self.render_template(self.template, title=self.title, form=form)
+        self.render_template(form=form)
 
     @role_required('tutor')
     def post(self, _id):
@@ -130,7 +130,7 @@ class ChpassHandler(BaseRequest):
         else:
             raise HTTPError(403)
         if not form.validate():
-            self.render_template(self.template, title=self.title, form=form)
+            self.render_template(form=form)
             return
         Admin.chpass(_id, form.data['password'])
         self.flash.success = 'Пароль успешно изменен'

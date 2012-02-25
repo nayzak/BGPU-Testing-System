@@ -17,13 +17,13 @@ class CreateStudentHandler(BaseRequest):
 
     @role_required('tutor')
     def get(self):
-        self.render_template(self.template, title=self.title, form=CreateStudentForm())
+        self.render_template(form=CreateStudentForm())
 
     @role_required('tutor')
     def post(self):
         form = CreateStudentForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, title=self.title, form=form)
+            self.render_template(form=form)
             return
         Student.create_student(
             first_name=form.data['first_name'],
@@ -57,8 +57,6 @@ class ListStudentHandler(BaseRequest):
         dest = self.get_argument('dest', 1)
         paginator = Paginator(Student.get_all(sort, dest), self.request.full_url(), page, 10)
         self.render_template(
-            self.template,
-            title=self.title,
             data=paginator.page,
             list_args=list_args,
             paginator=paginator
@@ -92,14 +90,14 @@ class EditStudentHandler(BaseRequest):
             organization_id = student.organization.id,
             userid = self.current_user['_id']
         )
-        self.render_template(self.template, title=self.title, form=form)
+        self.render_template(form=form)
 
     @role_required('tutor')
     def post(self, _id):
         _id = ObjectId(_id.decode('hex'))
         form = EditStudentForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, title=self.title, form=form)
+            self.render_template(form=form)
             return
         Student.update_student(
             _id=_id,

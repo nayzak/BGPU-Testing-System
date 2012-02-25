@@ -15,13 +15,13 @@ class CreateGroupHandler(BaseRequest):
 
     @role_required('tutor')
     def get(self):
-        self.render_template(self.template, title=self.title, form=CreateGroupForm())
+        self.render_template(form=CreateGroupForm())
 
     @role_required('tutor')
     def post(self):
         form = CreateGroupForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, title=self.title, form=form)
+            self.render_template(form=form)
             return
         Group.create_group(
             name=form.data['name'],
@@ -50,14 +50,14 @@ class EditGroupHandler(BaseRequest):
             graduated=group.graduated,
             organization=unicode(group.organization.id)
         )
-        self.render_template(self.template, title=self.title, form=form)
+        self.render_template(form=form)
 
     @role_required('tutor')
     def post(self, _id):
         _id = ObjectId(_id.decode('hex'))
         form = EditGroupForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, title=self.title, form=form)
+            self.render_template(form=form)
             return
         Group.update_group(
             _id=_id,
@@ -102,8 +102,6 @@ class ListGroupHandler(BaseRequest):
         dest = self.get_argument('dest', 1)
         paginator = Paginator(Group.get_all(sort, dest), self.request.full_url(), page, 10)
         self.render_template(
-            self.template,
-            title=self.title,
             data=paginator.page,
             list_args=list_args,
             paginator=paginator
@@ -121,4 +119,4 @@ class ViewGroupHandler(BaseRequest):
         group = Group.get_by('_id', _id)
         if not group:
             self.redirect('/admin/group/list')
-        self.render_template(self.template, title=self.title, group=group)
+        self.render_template(group=group)
