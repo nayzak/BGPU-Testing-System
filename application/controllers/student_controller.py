@@ -7,7 +7,6 @@ from application.models.student import Group
 from application.forms.manage_student import CreateStudentForm, EditStudentForm
 from application.views.helpers.tables import Paginator
 from pymongo.objectid import ObjectId
-from tornado.web import HTTPError
 import json
 
 
