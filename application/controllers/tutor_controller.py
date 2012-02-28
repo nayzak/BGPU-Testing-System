@@ -16,13 +16,13 @@ class CreateTutorHandler(BaseRequest):
 
     @role_required('admin')
     def get(self):
-        self.render_template(self.template, title=self.title, form=CreateTutorForm())
+        self.render_template(form=CreateTutorForm())
 
     @role_required('admin')
     def post(self):
         form = CreateTutorForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, title=self.title, form=form)
+            self.render_template(form=form)
             return
         Tutor.create_tutor(
             first_name=form.data['first_name'],
@@ -57,7 +57,7 @@ class EditTutorHandler(BaseRequest):
             organization=unicode(tutor.organization.id) if 'id' in tutor.organization else '0',
             userid=self.current_user['_id']
         )
-        self.render_template(self.template, title=self.title, form=form)
+        self.render_template(form=form)
 
     @role_required('tutor')
     def post(self, _id):
@@ -66,7 +66,7 @@ class EditTutorHandler(BaseRequest):
             raise HTTPError(403)
         form = EditTutorForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, title=self.title, form=form)
+            self.render_template(form=form)
             return
         Tutor.update_tutor(
             _id=_id,
@@ -114,8 +114,6 @@ class ListTutorHandler(BaseRequest):
         dest = self.get_argument('dest', 1)
         paginator = Paginator(Tutor.get_all(sort, dest), self.request.full_url(), page, 10)
         self.render_template(
-            self.template,
-            title=self.title,
             data=paginator.page,
             list_args=list_args,
             paginator=paginator
@@ -133,4 +131,4 @@ class ViewTutorHandler(BaseRequest):
         tutor = Tutor.get_by('_id', _id)
         if not tutor:
             self.redirect('/admin/tutor/list')
-        self.render_template(self.template, title=self.title, tutor=tutor)
+        self.render_template(tutor=tutor)

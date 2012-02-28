@@ -42,3 +42,6 @@ class BaseRequest(request.BaseRequest):
             imports=filter_imports,
             default_filters=options.mako_default_filters
         )
+
+    def render_template(self, **kwargs):
+        super(BaseRequest, self).render_template(self.template, title=self.title, **kwargs)

@@ -11,12 +11,12 @@ class LoginHandler(BaseRequest):
     template = '/admin/login.html'
 
     def get(self):
-        self.render_template(self.template, form=LoginForm(), title=self.title)
+        self.render_template(form=LoginForm())
 
     def post(self):
         form = LoginForm(self.request.arguments)
         if not form.validate():
-            self.render_template(self.template, form=form, title=self.title)
+            self.render_template(form=form)
             return
 
         user = User.get_by('email', form.email.data)
