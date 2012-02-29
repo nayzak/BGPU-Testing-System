@@ -3,5 +3,5 @@ from unittesting.controller_test_cases import ControllerTestCases
 
 class loginControllerTest(ControllerTestCases):
 
-    def test_do(self):
-        pass
+    def test_loginPage(self):
+        self.assertCode('/admin/login', 200)

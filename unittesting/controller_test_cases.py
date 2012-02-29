@@ -4,13 +4,10 @@
 
 '''
 import unittest
+from webunit.webunittest import WebTestCase
 
-class ControllerTestCases(unittest.TestCase):
+class ControllerTestCases(WebTestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        pass
+    def setUp(self):
+        self.setServer('localhost', '8000')
 
-    @classmethod
-    def tearDownClass(cls):
-        pass
