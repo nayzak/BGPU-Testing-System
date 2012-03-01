@@ -4,10 +4,9 @@
 
 '''
 import unittest
-from webunit.webunittest import WebTestCase
+from lib.webunittest import WebTestCase
 
 class ControllerTestCases(WebTestCase):
 
     def setUp(self):
         self.setServer('localhost', '8000')
-
