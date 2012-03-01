@@ -1,11 +1,7 @@
 import sys,os
 from whirlwind.core.log import Log
 
-environment = str()
-
 class Bootstrap():
-
-
     def __init__(self):
         self.application = None
         self.init_path()
@@ -35,11 +31,7 @@ class Bootstrap():
         from whirlwind.db.mongo import Mongo
 
         #parse the app config
-        global environment
-        if environment == 'development':
-            tornado.options.parse_config_file(os.path.join(path,'config/settings.py'))
-        elif environment == 'testing':
-            tornado.options.parse_config_file(os.path.join(path,'config/settings_testing.py'))
+        tornado.options.parse_config_file(os.path.join(path,'config/settings.py'))
         #parse the command line args
         tornado.options.parse_command_line()
 
@@ -80,8 +72,5 @@ class Bootstrap():
         return RouteLoader.load('application.controllers')
 
     @staticmethod
-    def run(path, env = 'development'):
-       global environment
-       environment = env
+    def run(path):
        (Bootstrap()).main(path)
-
