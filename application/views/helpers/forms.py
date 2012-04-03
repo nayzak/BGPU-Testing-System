@@ -2,7 +2,7 @@
 
 
 def render_form(form):
-    html = '<form class="form-horizontal", method="POST">'
+    html = '<form class="form-horizontal" method="POST">'
     html += '<fieldset>'
     html += '<legend>{}</legend>'.format(form.title)
     for field in form:
