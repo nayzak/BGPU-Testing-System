@@ -1,6 +1,7 @@
 # coding: utf-8
 from wtforms import TextField, FieldList, Form, FormField, SubmitField, validators
 from application.forms.fields import AutocompleteField
+from application.forms.widgets import FieldListWidget
 
 
 class PhoneForm(Form):
@@ -27,7 +28,7 @@ class CreateOrganizationForm(Form):
     name = TextField('Название', [validators.required()], description='Аббревиатура')
     full_name = TextField('Полное название', [validators.required()])
     status = AutocompleteField('Статус', [validators.required()], collection='organizations', db_field='status', description='Например: вуз, суз')
-    contacts = FieldList(FormField(ContactForm), label='Адрес')
+    contacts = FieldList(FormField(ContactForm), label='Адрес', widget=FieldListWidget())
     submit = SubmitField('Добавить')
 
     def __init__(self, formdata=None, obj=None, prefix='', **kwargs):

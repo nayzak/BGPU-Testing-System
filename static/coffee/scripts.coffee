@@ -1,11 +1,11 @@
 $ ->
     #удалить элемент из FieldList
-    $('.control-group .remove-button').live 'click', ->
+    $('.field-list-item .remove-item').live 'click', ->
         $(@).parent().remove()
         return false
 
     #добавить элемент в FieldList
-    $('.control-group .add-button').live 'click', ->
+    $('.field-list-item .add-item').live 'click', ->
         template = $(@).parent()
         tmp_id = template.attr('id').split('-')
         tmp_id.pop()
