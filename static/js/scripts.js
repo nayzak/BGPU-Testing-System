@@ -1,11 +1,11 @@
 (function() {
   var filter;
   $(function() {
-    $('.control-group .remove-button').live('click', function() {
+    $('.field-list-item .remove-item').live('click', function() {
       $(this).parent().remove();
       return false;
     });
-    $('.control-group .add-button').live('click', function() {
+    $('.field-list-item .add-item').live('click', function() {
       var clone, el, id, t_id, template, tmp_id, _i, _len, _ref;
       template = $(this).parent();
       tmp_id = template.attr('id').split('-');
