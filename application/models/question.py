@@ -15,6 +15,9 @@ class Question(Document):
         solution - правильный ответ
         complexity - сложность вопроса
         history - список словарей типа {editor_id: ObjectId, modified_date: datetime.datetime, comment: unicode}
+
+        db.question.insert({'position':{'subject':'matan', 'module':'intergal'}, 'body':'kak etu huetu reshat', 'solution':'asdasgasgrh4rh4y', 'complexity':100500, 'author_id':ObjectId("4f41cdc9b2c79a182e000000"), 'created_at':ISODate("2011-09-01T00:00:00Z"), 'history':{'editor_id': ObjectId("4f41cdc9b2c79a182e000000"), 'modified_date': ISODate("2011-09-01T00:00:00Z"), 'comment': 'trororlororl'} })
+
     '''
     structure = {
         'position': {

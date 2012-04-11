@@ -40,6 +40,23 @@
                         <li><a href="/admin/student/list"><i class="icon-th-list"></i>&nbsp;Список</a></li>
                         <li><a href="/admin/student/create"><i class="icon-plus-sign"></i>&nbsp;Добавить</a></li>
                     </ul>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle"  data-toggle="dropdown">
+                        Вопросы<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!--<li><a href="/admin/question/list"><i class="icon-th-list"></i>&nbsp;Список</a></li>-->
+                        <li><a href="/admin/question/create"><i class="icon-plus-sign"></i>&nbsp;Добавить</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle"  data-toggle="dropdown">
+                        Шаблоны<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/admin/template/create"><i class="icon-plus-sign"></i>&nbsp;Добавить</a></li>
+                    </ul>
+                </li>
                 </li>
             </ul>
             ${current_user | render_profile_menu}
