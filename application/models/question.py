@@ -1,6 +1,8 @@
+#coding: utf-8
 from whirlwind.db.mongo import Mongo
 from pymongo.objectid import ObjectId
-from pymongo import *
+from pymongo import ASCENDING, DESCENDING
+from mongokit import *
 import datetime
 from lib.utils import Solution
 
@@ -35,3 +37,32 @@ class Question(Document):
     required_fields = ['position', 'position.subject', 'position.module', 'body', 'solution', 'complexity', 'author_id']
 
     use_dot_notation = True
+
+    @staticmethod
+    def get_all(sorter='_id', direction=1):
+        return Mongo.db.ui.questions.Question.find().sort(sorter, ASCENDING if int(direction) == 1 else DESCENDING)
+
+
+    @staticmethod
+    def select_subject_choises(blank_element=True):
+        choises = map(lambda d: (unicode(d['position']['subject']), d['position']['subject']), Mongo.db.ui.questions.Question.find().sort('position.subject', ASCENDING))
+        choises = list(set(choises))
+        if blank_element:
+            choises.insert(0, ('-1', 'Любой'))
+        return choises
+
+    @staticmethod
+    def select_module_choises(blank_element=True):
+        choises = map(lambda d: (unicode(d['position']['module']), d['position']['module']), Mongo.db.ui.questions.Question.find().sort('position.module', ASCENDING))
+        choises = list(set(choises))
+        if blank_element:
+            choises.insert(0, ('-1', 'Любая'))
+        return choises
+
+    @staticmethod
+    def select_complexity_choises(blank_element=True):
+        choises = map(lambda d: (unicode(d['complexity']), d['complexity']), Mongo.db.ui.questions.Question.find().sort('complexity', ASCENDING))
+        choises = list(set(choises))
+        if blank_element:
+            choises.insert(0, ('-1', 'Любая'))
+        return choises
