@@ -48,7 +48,7 @@ class Question(Document):
         choises = map(lambda d: (unicode(d['position']['subject']), d['position']['subject']), Mongo.db.ui.questions.Question.find().sort('position.subject', ASCENDING))
         choises = list(set(choises))
         if blank_element:
-            choises.insert(0, ('-1', 'Любой'))
+            choises.insert(0, ('0', 'Любой'))
         return choises
 
     @staticmethod
@@ -56,7 +56,7 @@ class Question(Document):
         choises = map(lambda d: (unicode(d['position']['module']), d['position']['module']), Mongo.db.ui.questions.Question.find().sort('position.module', ASCENDING))
         choises = list(set(choises))
         if blank_element:
-            choises.insert(0, ('-1', 'Любая'))
+            choises.insert(0, ('0', 'Любая'))
         return choises
 
     @staticmethod
@@ -64,5 +64,5 @@ class Question(Document):
         choises = map(lambda d: (unicode(d['complexity']), d['complexity']), Mongo.db.ui.questions.Question.find().sort('complexity', ASCENDING))
         choises = list(set(choises))
         if blank_element:
-            choises.insert(0, ('-1', 'Любая'))
+            choises.insert(0, ('0', 'Любая'))
         return choises
