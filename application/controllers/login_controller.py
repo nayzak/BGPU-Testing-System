@@ -15,8 +15,6 @@ class LoginHandler(BaseRequest):
 
     def post(self):
         form = LoginForm(self.request.arguments)
-        print(self.request)
-        print(self.request.arguments)
         if not form.validate():
             self.render_template(form=form)
             return

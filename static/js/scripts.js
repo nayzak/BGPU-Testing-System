@@ -1,6 +1,6 @@
 (function() {
-  var filter;
   $(function() {
+    var updateComplexityFields, updateModuleFields, updateQuestionList, updateSubjectFields;
     $('.field-list-item .remove-item').live('click', function() {
       $(this).parent().remove();
       return false;
@@ -36,32 +36,135 @@
     $.ajax_loader = $('<i class="ajax-loader">');
     $.ajax_loader.hide();
     $('form select#group_id').after($.ajax_loader);
-    return $('form select#organization_id').live('change', filter);
-  });
-  filter = function() {
-    var org_id, select;
-    org_id = $(this).find('option:selected').attr('value');
-    select = $('form select#group_id');
-    $.ajax_loader.show();
-    select.prop('disabled', true);
-    $.ajax({
-      url: '/admin/student/updatelist',
-      data: org_id,
-      dataType: "json",
-      type: "POST",
-      success: function(response) {
-        var r, _i, _len;
-        if (response[0]) {
-          select.empty();
+    $('form select#organization_id').live('change', function() {
+      var org_id, select;
+      org_id = $(this).find('option:selected').attr('value');
+      select = $('form select#group_id');
+      $.ajax_loader.show();
+      select.prop('disabled', true);
+      $.ajax({
+        url: '/admin/student/updatelist',
+        data: org_id,
+        dataType: "json",
+        type: "POST",
+        success: function(response) {
+          var r, _i, _len;
+          if (response[0]) {
+            select.empty();
+          }
+          for (_i = 0, _len = response.length; _i < _len; _i++) {
+            r = response[_i];
+            select.append('<option value="' + r.group_id + '">' + r.name + '</option>');
+          }
+          $.ajax_loader.hide();
+          return select.prop('disabled', false);
         }
-        for (_i = 0, _len = response.length; _i < _len; _i++) {
-          r = response[_i];
-          select.append('<option value="' + r.group_id + '">' + r.name + '</option>');
-        }
-        $.ajax_loader.hide();
-        return select.prop('disabled', false);
-      }
+      });
+      return false;
     });
-    return false;
-  };
+    updateQuestionList = function() {
+      var complexity, module, subject, type;
+      type = $('form select#type').find('option:selected').attr('value');
+      subject = $('form select#subject').find('option:selected').attr('value');
+      module = $('form select#module').find('option:selected').attr('value');
+      complexity = $('form select#complexity').find('option:selected').attr('value');
+      $.ajax({
+        url: '/admin/template/updatelist',
+        data: {
+          type: type,
+          subject: subject,
+          module: module,
+          complexity: complexity
+        },
+        dataType: "json",
+        type: "POST",
+        success: function(response) {
+          return console.log(response);
+        }
+      });
+      return false;
+    };
+    updateComplexityFields = function() {
+      var module, select, subject, type;
+      select = $('form select#complexity');
+      type = $('form select#type').find('option:selected').attr('value');
+      subject = $('form select#subject').find('option:selected').attr('value');
+      module = $('form select#module').find('option:selected').attr('value');
+      $.ajax({
+        url: '/admin/template/complexity',
+        data: {
+          type: type,
+          subject: subject,
+          module: module
+        },
+        dataType: "json",
+        type: "POST",
+        success: function(response) {
+          var r, _i, _len;
+          select.empty();
+          select.append('<option value="none">Любая</option>');
+          for (_i = 0, _len = response.length; _i < _len; _i++) {
+            r = response[_i];
+            select.append('<option value="' + r.complexity + '">' + r.complexity + '</option>');
+          }
+          return updateQuestionList();
+        }
+      });
+      return false;
+    };
+    updateModuleFields = function() {
+      var select, subject, type;
+      select = $('form select#module');
+      type = $('form select#type').find('option:selected').attr('value');
+      subject = $('form select#subject').find('option:selected').attr('value');
+      $.ajax({
+        url: '/admin/template/module',
+        data: {
+          type: type,
+          subject: subject
+        },
+        dataType: "json",
+        type: "POST",
+        success: function(response) {
+          var r, _i, _len;
+          select.empty();
+          select.append('<option value="none">Любая</option>');
+          for (_i = 0, _len = response.length; _i < _len; _i++) {
+            r = response[_i];
+            select.append('<option value="' + r.module + '">' + r.module + '</option>');
+          }
+          return updateComplexityFields();
+        }
+      });
+      return false;
+    };
+    updateSubjectFields = function() {
+      var select, type;
+      select = $('form select#subject');
+      type = $('form select#type').find('option:selected').attr('value');
+      $.ajax({
+        url: '/admin/template/subject',
+        data: {
+          type: type
+        },
+        dataType: "json",
+        type: "POST",
+        success: function(response) {
+          var r, _i, _len;
+          select.empty();
+          select.append('<option value="none">Любой</option>');
+          for (_i = 0, _len = response.length; _i < _len; _i++) {
+            r = response[_i];
+            select.append('<option value="' + r.subject + '">' + r.subject + '</option>');
+          }
+          return updateModuleFields();
+        }
+      });
+      return false;
+    };
+    $('form select#type').live('change', updateSubjectFields);
+    $('form select#subject').live('change', updateModuleFields);
+    $('form select#module').live('change', updateComplexityFields);
+    return $('form select#complexity').live('change', updateQuestionList);
+  });
 }).call(this);

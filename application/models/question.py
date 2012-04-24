@@ -42,13 +42,12 @@ class Question(Document):
     def get_all(sorter='_id', direction=1):
         return Mongo.db.ui.questions.Question.find().sort(sorter, ASCENDING if int(direction) == 1 else DESCENDING)
 
-
     @staticmethod
     def select_subject_choises(blank_element=True):
         choises = map(lambda d: (unicode(d['position']['subject']), d['position']['subject']), Mongo.db.ui.questions.Question.find().sort('position.subject', ASCENDING))
         choises = list(set(choises))
         if blank_element:
-            choises.insert(0, ('0', 'Любой'))
+            choises.insert(0, ('none', 'Любой'))
         return choises
 
     @staticmethod
@@ -56,7 +55,7 @@ class Question(Document):
         choises = map(lambda d: (unicode(d['position']['module']), d['position']['module']), Mongo.db.ui.questions.Question.find().sort('position.module', ASCENDING))
         choises = list(set(choises))
         if blank_element:
-            choises.insert(0, ('0', 'Любая'))
+            choises.insert(0, ('none', 'Любая'))
         return choises
 
     @staticmethod
@@ -64,5 +63,17 @@ class Question(Document):
         choises = map(lambda d: (unicode(d['complexity']), d['complexity']), Mongo.db.ui.questions.Question.find().sort('complexity', ASCENDING))
         choises = list(set(choises))
         if blank_element:
-            choises.insert(0, ('0', 'Любая'))
+            choises.insert(0, ('none', 'Любая'))
         return choises
+
+    @staticmethod
+    def find_questons(params = None, fields = None, distinct = None):
+        if (distinct): questions = Mongo.db.ui.questions.Question.find(params, fields).distinct(distinct)
+        else: questions = Mongo.db.ui.questions.Question.find(params, fields)
+        return questions
+
+    @staticmethod
+    def dict_value_to_string(_dict):
+        for key, values in _dict.items():
+                _dict[key]=(str(values))
+        return _dict

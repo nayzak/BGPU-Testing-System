@@ -1,0 +1,8 @@
+db.t.insert({name: "a", age: 1, sex: "m"});
+db.t.insert({name: "a", age: 1, sex: "w"});
+db.t.insert({name: "a", age: 2, sex: "m"});
+db.t.insert({name: "a", age: 3, sex: "w"});
+db.t.insert({name: "b", age: 2, sex: "m"});
+db.t.insert({name: "b", age: 2, sex: "m"});
+db.t.insert({name: "b", age: 2, sex: "m"});
+db.t.insert({name: "b", age: 1, sex: "w"});
