@@ -58,7 +58,7 @@ $ ->
         module = $('form select#module').find('option:selected').attr('value')
         complexity = $('form select#complexity').find('option:selected').attr('value')
         $.ajax({
-                url: '/admin/template/updatelist',
+                url: '/admin/template/updateQuestionList',
                 data: {type, subject, module, complexity},
                 dataType: "json",
                 type: "POST",
@@ -73,7 +73,7 @@ $ ->
         subject = $('form select#subject').find('option:selected').attr('value')
         module = $('form select#module').find('option:selected').attr('value')
         $.ajax({
-                url: '/admin/template/complexity',
+                url: '/admin/template/updateComplexityFields',
                 data: {type, subject, module},
                 dataType: "json",
                 type: "POST",
@@ -91,7 +91,7 @@ $ ->
         type = $('form select#type').find('option:selected').attr('value')
         subject = $('form select#subject').find('option:selected').attr('value')
         $.ajax({
-                url: '/admin/template/module',
+                url: '/admin/template/updateModuleFields',
                 data: {type, subject},
                 dataType: "json",
                 type: "POST",
@@ -108,7 +108,7 @@ $ ->
         select = $('form select#subject')
         type = $('form select#type').find('option:selected').attr('value')
         $.ajax({
-                url: '/admin/template/subject',
+                url: '/admin/template/updateSubjectFields',
                 data: {type},
                 dataType: "json",
                 type: "POST",

@@ -1,4 +1,5 @@
 (function() {
+
   $(function() {
     var updateComplexityFields, updateModuleFields, updateQuestionList, updateSubjectFields;
     $('.field-list-item .remove-item').live('click', function() {
@@ -22,12 +23,8 @@
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         el = _ref[_i];
         el = $(el);
-        if (el.attr('id')) {
-          el.attr('id', el.attr('id').replace(t_id, id));
-        }
-        if (el.attr('name')) {
-          el.attr('name', el.attr('name').replace(t_id, id));
-        }
+        if (el.attr('id')) el.attr('id', el.attr('id').replace(t_id, id));
+        if (el.attr('name')) el.attr('name', el.attr('name').replace(t_id, id));
         el.attr('value', '');
       }
       template.after(clone);
@@ -49,9 +46,7 @@
         type: "POST",
         success: function(response) {
           var r, _i, _len;
-          if (response[0]) {
-            select.empty();
-          }
+          if (response[0]) select.empty();
           for (_i = 0, _len = response.length; _i < _len; _i++) {
             r = response[_i];
             select.append('<option value="' + r.group_id + '">' + r.name + '</option>');
@@ -69,7 +64,7 @@
       module = $('form select#module').find('option:selected').attr('value');
       complexity = $('form select#complexity').find('option:selected').attr('value');
       $.ajax({
-        url: '/admin/template/updatelist',
+        url: '/admin/template/updateQuestionList',
         data: {
           type: type,
           subject: subject,
@@ -91,7 +86,7 @@
       subject = $('form select#subject').find('option:selected').attr('value');
       module = $('form select#module').find('option:selected').attr('value');
       $.ajax({
-        url: '/admin/template/complexity',
+        url: '/admin/template/updateComplexityFields',
         data: {
           type: type,
           subject: subject,
@@ -118,7 +113,7 @@
       type = $('form select#type').find('option:selected').attr('value');
       subject = $('form select#subject').find('option:selected').attr('value');
       $.ajax({
-        url: '/admin/template/module',
+        url: '/admin/template/updateModuleFields',
         data: {
           type: type,
           subject: subject
@@ -143,7 +138,7 @@
       select = $('form select#subject');
       type = $('form select#type').find('option:selected').attr('value');
       $.ajax({
-        url: '/admin/template/subject',
+        url: '/admin/template/updateSubjectFields',
         data: {
           type: type
         },
@@ -167,4 +162,5 @@
     $('form select#module').live('change', updateComplexityFields);
     return $('form select#complexity').live('change', updateQuestionList);
   });
+
 }).call(this);

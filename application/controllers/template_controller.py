@@ -2,6 +2,7 @@
 from application.models.question import Question
 from lib.request import BaseRequest
 from lib.decorators import role_required
+from lib.tools import Tools
 from whirlwind.view.decorators import route
 from application.forms.manage_template import CreateTemplateForm
 from pymongo.objectid import ObjectId
@@ -16,66 +17,42 @@ class CreateTemplateHandler(BaseRequest):
     def get(self):
         self.render_template(form=CreateTemplateForm())
 
-@route('/admin/template/complexity')
-class CreateComplexityHandler(BaseRequest):
+@route('/admin/template/updateComplexityFields')
+class CreateUpdateComplexityFieldsHandler(BaseRequest):
 
     @role_required('tutor')
     def post(self):
         import urlparse
-        params = urlparse.parse_qs(self.request.body)
-        for param, values in params.items():
-            for value in values:
-                if (value == 'none'): del params[param]
-                elif (param == 'module' or param == 'subject'):
-                    params.update({'position.' + param : value})
-                    del params[param]
+        params = Tools.quary_from_params(urlparse.parse_qs(self.request.body))
         data = [{'complexity' : question} for question in Question.find_questons(params, {'complexity':1}, 'complexity')]
         self.write(json.dumps(data))
 
-@route('/admin/template/module')
-class CreateModuleHandler(BaseRequest):
+@route('/admin/template/updateModuleFields')
+class CreateUpdateModuleFieldsHandler(BaseRequest):
 
     @role_required('tutor')
     def post(self):
         import urlparse
-        params = urlparse.parse_qs(self.request.body)
-        for param, values in params.items():
-            for value in values:
-                if (value == 'none'): del params[param]
-                elif (param == 'subject'):
-                    params.update({'position.' + param : value})
-                    del params[param]
+        params = Tools.quary_from_params(urlparse.parse_qs(self.request.body))
         data = [{'module' : question} for question in Question.find_questons(params, {'position.module':1}, 'position.module')]
         self.write(json.dumps(data))
 
-@route('/admin/template/subject')
-class CreateSubjectHandler(BaseRequest):
+@route('/admin/template/updateSubjectFields')
+class CreateUpdateSubjectFieldsHandler(BaseRequest):
 
     @role_required('tutor')
     def post(self):
         import urlparse
-        params = urlparse.parse_qs(self.request.body)
-        for param, values in params.items():
-            for value in values:
-                if (value == 'none'): del params[param]
-                else: params[param] = value
+        params = Tools.quary_from_params(urlparse.parse_qs(self.request.body))
         data = [{'subject' : question} for question in Question.find_questons(params, {'position.subject':1},'position.subject')]
         self.write(json.dumps(data))
 
-@route('/admin/template/updatelist')
-class CreateUpdateListHandler(BaseRequest):
+@route('/admin/template/updateQuestionList')
+class CreateUpdateQuestionListHandler(BaseRequest):
 
     @role_required('tutor')
     def post(self):
         import urlparse
-        params = urlparse.parse_qs(self.request.body)
-        for param, values in params.items():
-            for value in values:
-                if (value == 'none'): del params[param]
-                elif (param == 'subject' or param == 'module'):
-                    params.update({'position.' + param : value})
-                    del params[param]
-                elif (param =='complexity'): params[param] = float(value)
-                else: params[param] = value
+        params = Tools.quary_from_params(urlparse.parse_qs(self.request.body))
         data = [Question.dict_value_to_string(question) for question in Question.find_questons(params)]
         self.write(json.dumps(data))
