@@ -53,6 +53,7 @@ $ ->
 
 # фильтры в добавление шаблона
     updateQuestionList = ->
+        select = $('form select#questions_list')
         type = $('form select#type').find('option:selected').attr('value')
         subject = $('form select#subject').find('option:selected').attr('value')
         module = $('form select#module').find('option:selected').attr('value')
@@ -63,7 +64,9 @@ $ ->
                 dataType: "json",
                 type: "POST",
                 success: (response) ->
-                        console.log(response)
+                        select.empty()
+                        for r in response
+                            select.append('<option value="'+r.i_id+'">'+r.body+'</option>')
         })
         return false
 
@@ -132,3 +135,7 @@ $ ->
 
 # сложность вопроса
     $('form select#complexity').live 'change', updateQuestionList
+
+# вопросы
+    $('form select#questions_list').live 'change', () ->
+        console.log("asd")

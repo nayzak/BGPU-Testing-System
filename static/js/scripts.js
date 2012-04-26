@@ -1,5 +1,4 @@
 (function() {
-
   $(function() {
     var updateComplexityFields, updateModuleFields, updateQuestionList, updateSubjectFields;
     $('.field-list-item .remove-item').live('click', function() {
@@ -23,8 +22,12 @@
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         el = _ref[_i];
         el = $(el);
-        if (el.attr('id')) el.attr('id', el.attr('id').replace(t_id, id));
-        if (el.attr('name')) el.attr('name', el.attr('name').replace(t_id, id));
+        if (el.attr('id')) {
+          el.attr('id', el.attr('id').replace(t_id, id));
+        }
+        if (el.attr('name')) {
+          el.attr('name', el.attr('name').replace(t_id, id));
+        }
         el.attr('value', '');
       }
       template.after(clone);
@@ -46,7 +49,9 @@
         type: "POST",
         success: function(response) {
           var r, _i, _len;
-          if (response[0]) select.empty();
+          if (response[0]) {
+            select.empty();
+          }
           for (_i = 0, _len = response.length; _i < _len; _i++) {
             r = response[_i];
             select.append('<option value="' + r.group_id + '">' + r.name + '</option>');
@@ -58,7 +63,8 @@
       return false;
     });
     updateQuestionList = function() {
-      var complexity, module, subject, type;
+      var complexity, module, select, subject, type;
+      select = $('form select#questions_list');
       type = $('form select#type').find('option:selected').attr('value');
       subject = $('form select#subject').find('option:selected').attr('value');
       module = $('form select#module').find('option:selected').attr('value');
@@ -74,7 +80,14 @@
         dataType: "json",
         type: "POST",
         success: function(response) {
-          return console.log(response);
+          var r, _i, _len, _results;
+          select.empty();
+          _results = [];
+          for (_i = 0, _len = response.length; _i < _len; _i++) {
+            r = response[_i];
+            _results.push(select.append('<option value="' + r.i_id + '">' + r.body + '</option>'));
+          }
+          return _results;
         }
       });
       return false;
@@ -160,7 +173,9 @@
     $('form select#type').live('change', updateSubjectFields);
     $('form select#subject').live('change', updateModuleFields);
     $('form select#module').live('change', updateComplexityFields);
-    return $('form select#complexity').live('change', updateQuestionList);
+    $('form select#complexity').live('change', updateQuestionList);
+    return $('form select#questions_list').live('change', function() {
+      return console.log("asd");
+    });
   });
-
 }).call(this);

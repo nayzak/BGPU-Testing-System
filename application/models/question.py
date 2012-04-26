@@ -67,7 +67,12 @@ class Question(Document):
         return choises
 
     @staticmethod
-    def find_questons(params = None, fields = None, distinct = None):
+    def select_questions_choises(fields = None):
+        choises = map(lambda d: (d['_id'],unicode(d['body'])), Question.find_questions(None, fields))
+        return choises
+
+    @staticmethod
+    def find_questions(params = None, fields = None, distinct = None):
         if (distinct): questions = Mongo.db.ui.questions.Question.find(params, fields).distinct(distinct)
         else: questions = Mongo.db.ui.questions.Question.find(params, fields)
         return questions

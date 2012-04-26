@@ -1,5 +1,5 @@
 #coding: utf-8
-from wtforms import Form, SubmitField, SelectField
+from wtforms import Form, SubmitField, FieldList, SelectField, FormField, SelectMultipleField
 from application.models.question import Question
 
 class CreateTemplateForm(Form):
@@ -9,4 +9,5 @@ class CreateTemplateForm(Form):
     subject = SelectField('Предмет', choices=Question.select_subject_choises())
     module = SelectField('Дидактическая единица', choices=Question.select_module_choises())
     complexity = SelectField('Cложность вопроса', choices=Question.select_complexity_choises())
+    questions_list = SelectMultipleField('Вопросы', choices=Question.select_questions_choises({'body':1}))
     submit = SubmitField('Добавить шаблон')
