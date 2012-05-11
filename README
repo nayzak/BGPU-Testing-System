@@ -1,11 +1,10 @@
 Install
 sudo apt-get install python-pip
 sudo apt-get install python-dev
-sudo pip install tornado Mako MongoKit python-dateutil pytz wtforms
+sudo pip install tornado Mako MongoKit python-dateutil pytz wtforms webunit
 git clone git://github.com/trendrr/whirlwind.git
 cd whirlwind
 sudo python setup.py install
-download and install webunit http://pypi.python.org/pypi/webunit/1.3.9
 
 Open /usr/lib/python2.7/site.py as root for editing. Search line 493 or near. Change encoding = "ascii" to encoding = "utf-8"
 
