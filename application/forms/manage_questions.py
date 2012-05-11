@@ -7,13 +7,13 @@ from application.forms.widgets import FieldListWidget
 class QuestionSolutionMap(Form):
     class_ = 'form-inline'
 
-    key = TextField()
-    value = TextField()
+    key = TextField(label='Ключ')
+    value = TextField(label='Значение')
 
 
 class QuestionSolution(Form):
-    one_answer = TextField()
-    some_answers = FieldList(TextField(), min_entries=1, widget=FieldListWidget())
+    one_answer = TextField(label='Ответ')
+    some_answers = FieldList(TextField(label='Вариант ответа'), min_entries=1, widget=FieldListWidget())
     map_answer = FieldList(FormField(QuestionSolutionMap), min_entries=1, widget=FieldListWidget())
     append_answer = TextField()
 
@@ -21,5 +21,5 @@ class QuestionSolution(Form):
 class CreateQuestionForm(Form):
     title = 'Добавление вопроса'
 
-    solution = TabbedFields(QuestionSolution, label='Ответ', tabs=('С выбором варианта', 'С выбором нескольких вариантов', 'Установление соответствия', 'Дополнение фразой'))
+    solution = TabbedFields(QuestionSolution, label='Ответ', tabs=('Один вариант', 'Несколько вариантов', 'Соответствие', 'Фраза'))
     submit = SubmitField('Добавить вопрос')

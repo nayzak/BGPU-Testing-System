@@ -15,4 +15,4 @@ class TabbedFields(FormField):
     def __init__(self, form_class, tabs=tuple(), label=None, validators=None, separator='-', **kwargs):
         self.tabs = tabs
         kwargs['widget'] = TabbedFieldsWidget()
-        super(TabbedFields, self).__init__(form_class, label=None, validators=None, separator='-', **kwargs)
+        super(TabbedFields, self).__init__(form_class, label, validators, separator, **kwargs)

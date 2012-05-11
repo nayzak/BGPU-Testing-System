@@ -13,3 +13,10 @@ class CreateQuestionHandler(BaseRequest):
     @role_required('tutor')
     def get(self):
         self.render_template(form=CreateQuestionForm())
+
+    @role_required('tutor')
+    def post(self):
+        print self.request.arguments
+        form = CreateQuestionForm(self.request.arguments)
+        self.render_template(form=form)
+        print form.data

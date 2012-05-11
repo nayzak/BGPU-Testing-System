@@ -66,7 +66,7 @@ class TabbedFieldsWidget(object):
 
     def __call__(self, field, **kwargs):
         kwargs.setdefault('id', field.id)
-        html = ['<div class="tabbable tabs-right" {}>'.format(html_params(**kwargs))]
+        html = ['<div class="tabbable tabs-bottom" {}>'.format(html_params(**kwargs))]
         html.append('<ul class="nav nav-tabs">')
         for i, subfield in enumerate(field):
             _class = 'class="active"' if i == self.active else ''
@@ -79,7 +79,5 @@ class TabbedFieldsWidget(object):
             html.append('<div class="tab-pane{}" id="{}">{}</div>'.format(_class, i, content))
         html.append('</div>')
         html.append('</div>')
+        html.append('<input type="hidden" name="{}" value="0"/>'.format('selected-tab-' + kwargs['id']))
         return HTMLString(''.join(html))
-
-    def render_field_list(self, field):
-        pass
