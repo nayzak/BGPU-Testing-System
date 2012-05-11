@@ -11,7 +11,7 @@ class CreateStudentForm(Form):
     last_name = TextField('Фамилия', [validators.required()])
     first_name = TextField('Имя', [validators.required()])
     middle_name = TextField('Отчество', [validators.required()])
-    organization_id  = SelectField('Учебное заведение', choices=Organization.select_field_choises())
+    organization_id = SelectField('Учебное заведение', choices=Organization.select_field_choises())
     group_id = SelectField('Группа', choices=Group.select_field_choises())
     submit = SubmitField('Добавить студента')
 

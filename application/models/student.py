@@ -64,7 +64,6 @@ class Student(User):
     @staticmethod
     def update_student(_id, first_name, middle_name, last_name, group_id):
         group = Group.get_by('_id', ObjectId(group_id))
-        print(group)
         Mongo.db.ui.users.Student.update(
             {'_id': _id},
             {'$set': {'name.first': first_name,
