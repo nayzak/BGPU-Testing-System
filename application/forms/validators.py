@@ -1,6 +1,6 @@
 from wtforms.validators import StopValidation
 from whirlwind.db.mongo import Mongo
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 import hashlib
 
 

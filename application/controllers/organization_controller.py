@@ -4,7 +4,7 @@ from whirlwind.view.decorators import route
 from lib.decorators import role_required
 from application.forms.manage_organization import CreateOrganizationForm, EditOrganizationForm
 from application.models.organization import Organization
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 from application.views.helpers.tables import Paginator
 
 

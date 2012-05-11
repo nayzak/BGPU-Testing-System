@@ -5,7 +5,7 @@ from lib.decorators import role_required
 from lib.tools import Tools
 from whirlwind.view.decorators import route
 from application.forms.manage_template import CreateTemplateForm
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 import json
 import urlparse
 

@@ -6,7 +6,7 @@ from application.forms.manage_tutor import CreateTutorForm, EditTutorForm
 from application.models.tutor import Tutor
 from application.views.helpers.tables import Paginator
 from tornado.web import HTTPError
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 
 
 @route('/admin/tutor/create')

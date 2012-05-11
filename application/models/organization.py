@@ -1,6 +1,6 @@
 #coding: utf-8
 from whirlwind.db.mongo import Mongo
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 from mongokit import *
 from pymongo import ASCENDING, DESCENDING
 

@@ -6,7 +6,7 @@ from application.models.admin import Admin
 from application.forms.manage_admin import CreateAdminForm, EditAdminForm
 from application.forms.manage_tutor import ChpassForm, AdminChpassForm
 from tornado.web import HTTPError
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 
 
 @route('/admin')

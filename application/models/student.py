@@ -1,7 +1,7 @@
 #coding: utf-8
 from application.models.user import User
 from whirlwind.db.mongo import Mongo
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 from pymongo import ASCENDING, DESCENDING
 from application.models.group import Group
 import datetime

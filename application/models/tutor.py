@@ -2,7 +2,7 @@
 from application.models.user import User
 from application.models.organization import Organization
 from whirlwind.db.mongo import Mongo
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 from pymongo import ASCENDING, DESCENDING
 import hashlib
 import datetime

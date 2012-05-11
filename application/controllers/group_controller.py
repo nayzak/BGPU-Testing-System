@@ -4,7 +4,7 @@ from lib.decorators import role_required
 from whirlwind.view.decorators import route
 from application.models.group import Group
 from application.forms.manage_group import CreateGroupForm, EditGroupForm
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 from application.views.helpers.tables import Paginator
 
 

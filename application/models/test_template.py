@@ -1,5 +1,5 @@
 from whirlwind.db.mongo import Mongo
-from pymongo.objectid import ObjectId
+from bson.objectid import ObjectId
 from pymongo import *
 import datetime
 
