@@ -1,6 +1,7 @@
 #coding: utf-8
 from wtforms.widgets import HTMLString, html_params
 
+
 class TypeheadInput(object):
     def __init__(self, autocomplete_list):
         self.autocomplete_list = '["{}"]'.format('","'.join(autocomplete_list))
@@ -13,6 +14,7 @@ class TypeheadInput(object):
         if 'value' not in kwargs:
             kwargs['value'] = field._value()
         return HTMLString(u'<input %s />' % html_params(name=field.name, **kwargs))
+
 
 class FieldListWidget(object):
     def __init__(self):
@@ -81,10 +83,9 @@ class TabbedFieldsWidget(object):
         return HTMLString(''.join(html))
 
 class ButtonWidget(object):
-    def __init__(self, label = '', _id = ''):
-        self.label = label
-        self._id = _id
+    def __init__(self):
+        pass
 
     def __call__(self, field, **kwargs):
-        html = '<button class="btn" id="'+self._id+'" type="button"  href="#">'+self.label+'</button>'
-        return html
+        print "asdsadasdasdd"
+        return "asdsd"

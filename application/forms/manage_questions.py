@@ -10,7 +10,6 @@ class QuestionSolutionMap(Form):
     key = TextField(label='Ключ')
     value = TextField(label='Значение')
 
-
 class QuestionSolution(Form):
     one_answer = TextField(label='Ответ')
     some_answers = FieldList(TextField(label='Вариант ответа'), min_entries=1, widget=FieldListWidget())

@@ -8,6 +8,7 @@ from application.forms.manage_template import CreateTemplateForm
 from bson.objectid import ObjectId
 import json
 import urlparse
+import datetime
 
 @route('/admin/template/create')
 class CreateTemplateHandler(BaseRequest):
@@ -17,6 +18,20 @@ class CreateTemplateHandler(BaseRequest):
     @role_required('tutor')
     def get(self):
         self.render_template(form=CreateTemplateForm())
+
+    @role_required('tutor')
+    def post(self):
+        form = CreateTemplateForm(self.request.arguments)
+        Template.create_template(
+            title = form.data['template_title'],
+            description = form.data['description'],
+            questions = form.data['made_list'],
+            author_id = form.data['template_title'],
+            created_at = datetime.datetime.now(),
+            history = [dict],
+        )
+        self.flash.success = 'Шаблон успешно добавлен'
+        self.redirect('/admin/')
 
 @route('/admin/template/updateComplexityFields')
 class CreateUpdateComplexityFieldsHandler(BaseRequest):

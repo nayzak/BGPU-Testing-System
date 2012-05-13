@@ -136,6 +136,21 @@ $ ->
 # сложность вопроса
     $('form select#complexity').live 'change', updateQuestionList
 
-# вопросы
-    $('form select#questions_list').live 'change', () ->
-        console.log("asd")
+# кнопка добавить
+    $('form button#buttonAdd').live 'click', ()->
+        $('form select#questions_list option:selected').each ()->
+            select = $('form select#made_list')
+            value = $(@).attr('value')
+            not_append = 1
+            $('form select#made_list option').each ()->
+                if $(@).attr('value') == value
+                    not_append = 0
+            if (not_append)
+                select.append('<option value="'+$(@).attr('value')+'">'+$(@).text()+'</option>')
+        return false
+
+# кнопка удаления
+    $('form button#buttonDelete').live 'click', ()->
+        $('form select#made_list option:selected').each ()->
+            $(@).remove()
+        return false
