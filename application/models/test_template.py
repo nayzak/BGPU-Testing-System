@@ -1,11 +1,21 @@
+#coding: utf-8
 from whirlwind.db.mongo import Mongo
 from bson.objectid import ObjectId
 from pymongo import *
+from mongokit import *
 import datetime
-
 
 @Mongo.db.connection.register
 class TestTemplate(Document):
+    '''
+        title = название шаблона
+        description = описание
+        questions = набор вопросов
+        author_id = автор шаблона
+        created_at = дата создания
+        history = история
+    '''
+
     structure = {
         'title': unicode,
         'description': unicode,
@@ -21,21 +31,18 @@ class TestTemplate(Document):
 
     @staticmethod
     def instance(title, description, questions, author_id, created_at, history):
-        student = Student()
-        student.name.first = first_name
-        student.name.middle = middle_name
-        student.name.last = last_name
-        try:
-            group_id = ObjectId(group_id.decode('hex'))
-            group = Group.get_by('_id', group_id)
-            student.group.id = group_id
-            student.group.name = group.name
-            student.group.created_at = group.created_at
-            student.organization.id = group.organization.id
-            student.organization.name = group.organization.name
-        except:
-            student.group = dict()
-            student.organization = dict()
-        student.created_at = datetime.datetime.utcnow()
-        student.history.num_logins = 0
-        return student
+        template = Mongo.db.ui.templates.TestTemplate()
+        template['title'] = unicode(title)
+        template['description'] = description
+        template['questions'] = questions
+        template['author_id'] = author_id
+        template['created_at'] = created_at
+        template['history'] = history
+        return template
+
+    @staticmethod
+    def create_template(title, description, questions, author_id, created_at, history):
+        template = TestTemplate.instance(title, description, questions, author_id, created_at, history)
+        print template
+        Mongo.db.ui.templates.insert(template)
+        return template

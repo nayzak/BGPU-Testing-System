@@ -5,6 +5,7 @@ from lib.decorators import role_required
 from lib.tools import Tools
 from whirlwind.view.decorators import route
 from application.forms.manage_template import CreateTemplateForm
+from application.models.test_template import TestTemplate
 from bson.objectid import ObjectId
 import json
 import urlparse
@@ -22,16 +23,20 @@ class CreateTemplateHandler(BaseRequest):
     @role_required('tutor')
     def post(self):
         form = CreateTemplateForm(self.request.arguments)
-        Template.create_template(
+        TestTemplate.create_template(
             title = form.data['template_title'],
             description = form.data['description'],
             questions = form.data['made_list'],
-            author_id = form.data['template_title'],
+            author_id = self.current_user,
             created_at = datetime.datetime.now(),
-            history = [dict],
+            history = [
+                {'editor_id': self.current_user},
+                {'modify_date': datetime.datetime.now()},
+                {'comment': form.data['comments']}
+            ],
         )
         self.flash.success = 'Шаблон успешно добавлен'
-        self.redirect('/admin/')
+        self.redirect('/admin/template/create')
 
 @route('/admin/template/updateComplexityFields')
 class CreateUpdateComplexityFieldsHandler(BaseRequest):
