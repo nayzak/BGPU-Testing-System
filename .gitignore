@@ -2,3 +2,4 @@
 .bts.sublime-workspace
 /tmp/*
 *.pyc
+/bts.sh
