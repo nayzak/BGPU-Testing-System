@@ -1,8 +1,7 @@
 #coding: utf-8
 from wtforms import Form, SubmitField, FieldList, SelectField, FormField, SelectMultipleField, TextField, TextAreaField
 from application.models.question import Question
-#from application.forms.widgets import ButtonWidget
-from application.forms.widgets import *
+from application.forms.widgets import ButtonWidget
 
 class ButtonTemplteForm(Form):
     class_= 'form-inline'
@@ -20,4 +19,5 @@ class CreateTemplateForm(Form):
     buttonAdd = FieldList(FormField(ButtonTemplteForm), label = ' ', min_entries=1, widget=ButtonWidget(label = 'добавить', _id = 'buttonAdd'))
     buttonDelete = FieldList(FormField(ButtonTemplteForm), label = ' ', min_entries=1, widget=ButtonWidget(label = 'удалить', _id = 'buttonDelete'))
     made_list = SelectMultipleField('Вопросы для добавления', choices=[])
+    comments = TextAreaField(label = 'Комментарии')
     submit = SubmitField('Добавить шаблон')

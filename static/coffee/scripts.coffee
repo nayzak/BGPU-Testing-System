@@ -154,3 +154,9 @@ $ ->
         $('form select#made_list option:selected').each ()->
             $(@).remove()
         return false
+
+# выделяем вопросы для поста
+    $('form input#submit').live 'click', ()->
+        $('form select#made_list option').each ()->
+            $(@).attr('selected', 'selected')
+        return true
